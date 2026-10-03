@@ -43,17 +43,49 @@ html,body{margin:0;height:100%;background:#3b2230;overflow:hidden;position:fixed
 .greet:before{content:"";position:absolute;left:-12px;top:50%;margin-top:-8px;border:8px solid transparent;border-right:10px solid #ff8a6a;border-left:0}
 @media (max-height:520px){#mascot{width:92px;height:103px}.hero{gap:10px;margin-bottom:0}.greet{font-size:12px;padding:3px 10px}.panel{padding:10px 22px 14px}.title{font-size:34px;letter-spacing:2px}.sub{margin:0 0 6px;font-size:13px}
   .how{font-size:13px;line-height:1.45;columns:2;column-gap:26px;max-width:none;margin-bottom:6px}.how li{break-inside:avoid;margin-bottom:3px}
-  .prices{font-size:13px;margin-bottom:4px}.btn{font-size:20px;padding:8px 34px}.sticky{bottom:-14px}.stars{font-size:40px}.big{font-size:28px;margin:0}.stat{font-size:14px;margin:6px 0 8px;grid-template-columns:auto auto auto auto}.cmt{font-size:13px;margin-bottom:8px}}
+  .prices{font-size:13px;margin-bottom:4px}.btn{font-size:20px;padding:8px 34px}.sticky{bottom:-14px}.stars{font-size:40px}.big{font-size:28px;margin:0}.stat{font-size:14px;margin:6px 0 8px;grid-template-columns:auto auto auto auto}.cmt{font-size:13px;margin-bottom:6px}.earn{font-size:14px;margin:0 0 2px}.badge{font-size:15px;padding:1px 14px;margin:0 auto 1px}.stars{font-size:28px;line-height:1}.big{font-size:24px;margin:0}.stat{margin:2px 0 4px;gap:1px 18px;font-size:13px}#over .panel{padding-top:6px}}
 .badge{display:none;margin:2px auto 4px;padding:4px 20px;border-radius:999px;background:linear-gradient(90deg,#7b3fb5,#e8452c,#ffb02e);color:#fff;font-weight:900;font-size:clamp(16px,3.6vmin,24px);letter-spacing:2px;box-shadow:0 3px 0 #8a2a5a;width:max-content}
 .badge.on{display:block;animation:bb .8s ease-in-out infinite alternate}@keyframes bb{from{transform:scale(1)}to{transform:scale(1.08)}}
 .cmt{font-size:clamp(14px,2.8vmin,18px);color:#b07a5a;margin-bottom:14px}
+.savebar{display:flex;flex-wrap:wrap;gap:4px 8px;justify-content:center;margin-top:6px;font-weight:800;font-size:clamp(12px,2.4vmin,15px);color:#7a4a30}
+.savebar span{background:#ffe9c9;border-radius:10px;padding:1px 8px}.savebar b{color:#e8452c}.savebar em{width:100%;font-style:normal;color:#b07a5a;font-size:12px}
+.brow{display:flex;gap:12px;justify-content:center;align-items:center;flex-wrap:wrap}
+.btn.ward{background:linear-gradient(#ff9ec0,#e8608c);box-shadow:0 6px 0 #a83a62}.btn.ward:active{box-shadow:0 3px 0 #a83a62}
+.reset{font-family:inherit;background:none;border:none;color:#b8a090;font-size:12px;text-decoration:underline;padding:4px 6px;touch-action:manipulation}
+.earn{font-weight:900;font-size:clamp(15px,3vmin,20px);color:#7a4a30;margin:2px 0 8px}.earn b{color:#e8452c}.earn .nb{display:inline-block;margin-left:6px;background:#ffd23f;color:#7a3a00;border-radius:8px;padding:0 6px;font-size:.85em}
+#wardrobe{z-index:6}#dlg{z-index:8}
+.wpanel{width:min(94vw,860px);max-width:none;height:min(92vh,640px);padding:10px 14px 10px;display:flex;flex-direction:column;overflow:hidden}
+.whead{display:flex;align-items:center;gap:10px;justify-content:space-between}
+.wtitle{font-size:clamp(22px,4.6vmin,34px);font-weight:900;color:#e8452c;letter-spacing:2px;text-shadow:0 3px 0 #ffd2a8;white-space:nowrap}
+.wmoney{font-weight:900;color:#7a4a30;background:#ffe9c9;border-radius:14px;padding:4px 12px;font-size:clamp(14px,3vmin,20px);white-space:nowrap}.wmoney b{color:#e8452c}
+.wclose{font-family:inherit;font-weight:900;font-size:16px;border:none;border-radius:14px;padding:8px 16px;background:#7a6a8a;color:#fff;box-shadow:0 4px 0 #4a3a5a;touch-action:manipulation}
+.wbody{display:flex;gap:12px;flex:1;min-height:0;margin-top:8px}
+.wleft{flex:none;width:clamp(150px,28vw,250px);display:flex;flex-direction:column;align-items:center;background:radial-gradient(circle at 50% 60%,#ffe1c8,#fff3e6 70%);border-radius:18px;padding:4px;box-sizing:border-box;min-height:0}
+#wPrev{width:100%;flex:1;min-height:0;display:block}
+.wname{font-weight:900;font-size:13px;color:#a0704a;padding:2px 0 4px;white-space:nowrap}
+.wright{flex:1;min-width:0;display:flex;flex-direction:column;min-height:0}
+.tabs{display:flex;gap:8px;margin-bottom:8px}
+.tab{flex:1;font-family:inherit;font-weight:900;font-size:18px;padding:7px;border-radius:14px;border:3px solid #f0c9a0;background:#fff;color:#a0704a;touch-action:manipulation}
+.tab.on{background:#ff8a50;color:#fff;border-color:#e8452c}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(98px,1fr));gap:8px;overflow-y:auto;min-height:0;flex:1;padding:2px 2px 8px;touch-action:pan-y;align-content:start}
+.card{font-family:inherit;border:3px solid #f0d8bc;border-radius:14px;background:#fff;padding:4px 4px 5px;display:flex;flex-direction:column;align-items:center;touch-action:manipulation;color:#5a3a2e;cursor:pointer}
+.card canvas{width:100%;aspect-ratio:1/1;border-radius:10px;background:#fff3e6;display:block}
+.card .n{font-weight:900;font-size:13px;margin-top:3px;white-space:nowrap}
+.card .p{font-weight:900;font-size:13px;color:#e8452c}
+.card.eq{border-color:#ffb300;background:#fffbe6;box-shadow:0 0 0 2px #ffe066}.card.eq .p{color:#2fa84a}
+.card.own .p{color:#6a8aa0}.card.poor .p{color:#b8a898}.card.try{border-color:#ff6f91;border-style:dashed}
+.wmsg{min-height:20px;font-weight:900;font-size:14px;margin-top:4px;line-height:1.3}
+.dbox{max-width:min(86vw,420px)}.dtext{font-size:20px;font-weight:900;color:#5a3a2e;margin:6px 0 14px;line-height:1.5}.dtext b{color:#e8452c}.dtext small{font-size:14px;color:#a0704a}
+.dbox .btn{font-size:18px;padding:8px 22px}
+@media (orientation:portrait){.wpanel{height:min(90vh,900px)}.wbody{flex-direction:column}.wleft{width:100%;height:31%}#wPrev{width:100%;flex:1}.grid{grid-template-columns:repeat(3,1fr)}.wtitle{font-size:24px}}
+@media (max-height:520px){.wpanel{height:94vh;padding:6px 12px 6px}.wtitle{font-size:22px}.tab{font-size:16px;padding:4px}.tabs{margin-bottom:6px}.grid{grid-template-columns:repeat(auto-fill,minmax(88px,1fr));gap:6px}.wbody{margin-top:4px}.card .n,.card .p{font-size:12px}.wmsg{font-size:13px;min-height:17px;margin-top:2px}.wclose{padding:5px 12px}}
 </style>
 </head>
 <body>
 <canvas id="c"></canvas>
 <div id="start" class="ov show"><div class="panel">
   <div class="hero"><canvas id="mascot"></canvas><div><div class="title">77的<span>宝藏烧烤摊</span></div>
-  <div class="sub">— 夜市人气烤串摊 —</div><div class="greet">欢迎来到<b>77的宝藏烧烤摊</b>～<br>我是老板娘7姐，烤得香香的哦！</div></div></div>
+  <div class="sub">— 夜市人气烤串摊 —</div><div class="greet">欢迎来到<b>77的宝藏烧烤摊</b>～<br>我是老板娘7姐，烤得香香的哦！</div><div class="savebar" id="saveBar"></div></div></div>
   <ol class="how">
     <li>点左边的<b>生串托盘</b>，把串放上烤架（最多 6 串）。</li>
     <li>每串都要按顺序调味：<b>撒盐 → 撒辣椒 → 翻面 → 撒盐 → 撒辣椒</b>。<br>先点右边的<b>工具</b>，再点烤串（工具会保持选中，可以连着点好几串）。</li>
@@ -62,7 +94,7 @@ html,body{margin:0;height:100%;background:#3b2230;overflow:hidden;position:fixed
     <li>顾客耐心用完会生气离开！营业 <b>90 秒</b>，赚越多金币越好。</li>
   </ol>
   <div class="prices"><span class="chip">土豆 ¥3（熟得快）</span><span class="chip">烤鹅翅 ¥7</span><span class="chip">牛肠 ¥5（熟得慢）</span><br>上菜快还有小费哦～ 调味时偶尔会触发<b>绝技</b>！收入满 <b>¥80</b> 还有 <b>BOSS</b> 加时赛！</div>
-  <div class="sticky"><button class="btn" id="startBtn">开始营业</button></div>
+  <div class="sticky"><div class="brow"><button class="btn" id="startBtn">开始营业</button><button class="btn ward" id="wardBtn">衣橱</button></div><button class="reset" id="resetBtn">重置存档</button></div>
 </div></div>
 <div id="pause" class="ov"><div class="panel"><div class="big">休息一下</div><div class="cmt">烤架上的串也暂停啦</div><button class="btn" id="resumeBtn">继续营业</button></div></div>
 <div id="over" class="ov"><div class="panel">
@@ -70,9 +102,17 @@ html,body{margin:0;height:100%;background:#3b2230;overflow:hidden;position:fixed
   <div class="badge" id="badge">★ 击败Boss！★</div>
   <div class="stars" id="stars"></div>
   <div class="stat" id="stat"></div>
+  <div class="earn" id="earn"></div>
   <div class="cmt" id="cmt"></div>
-  <button class="btn" id="againBtn">再来一局</button>
+  <div class="brow sticky"><button class="btn" id="againBtn">再来一局</button><button class="btn ward" id="wardBtn2">衣橱</button></div>
 </div></div>
+<div id="wardrobe" class="ov"><div class="panel wpanel">
+  <div class="whead"><div class="wtitle">77的衣橱</div><div class="wmoney">存款 <b id="wMoney">¥0</b></div><button class="wclose" id="wClose">返回</button></div>
+  <div class="wbody"><div class="wleft"><canvas id="wPrev"></canvas><div class="wname" id="wName"></div></div>
+    <div class="wright"><div class="tabs"><button class="tab on" data-tab="outfit">衣服</button><button class="tab" data-tab="hat">帽子</button></div><div class="grid" id="wGrid"></div></div></div>
+  <div class="wmsg" id="wMsg"></div>
+</div></div>
+<div id="dlg" class="ov"><div class="panel dbox"><div class="dtext" id="dText"></div><div class="brow"><button class="btn alt" id="dNo">取消</button><button class="btn" id="dYes">确定</button></div></div></div>
 <script>
 "use strict";
 // ================= 常量 =================
@@ -182,7 +222,7 @@ function resetGame(){time=ROUND;coins=0;served=0;lost=0;burntCount=0;sold=0;reje
   slots.fill(null);spots.fill(null);particles=[];floats=[];toast=null;drag=null;
   flyers=[];ultT=0;bossRound=false;bossResult='none';bossSpawnT=0;bossEndT=0;Object.assign(fx,{flash:0,ring:0,slow:0,shake:0,callout:null,banner:null,sweep:null});}
 function startGame(){ensureAudio();unlockSpeech();resetGame();$('badge').classList.remove('on');state='play';paused=false;show(null);showToast('开张啦！先把串放上烤架～','#fff');sfx('happy');bossAct('happy',1);bossSay('开张啦！');}
-function show(id){['start','pause','over'].forEach(s=>$(s).classList.toggle('show',s===id));}
+function show(id){['start','pause','over','wardrobe'].forEach(s=>$(s).classList.toggle('show',s===id));}
 function setPause(v){if(state!=='play')return;paused=v;show(v?'pause':null);}
 function showToast(text,color,warn){toast={text,color:color||'#fff',t:0,dur:1.8,warn:!!warn};}
 function addFloat(text,x,y,color,size){floats.push({text,x,y,color:color||'#ffd23f',size:size||30,t:0,dur:1.2});}
@@ -327,6 +367,7 @@ function endGame(){state='over';selected=-1;drag=null;tool=null;sfx('end');
   $('stat').innerHTML='<span>总收入</span><b>¥ '+coins+'</b><span>服务顾客</span><b>'+served+' 位</b><span>流失顾客</span><b>'+lost+' 位</b><span>卖出烤串</span><b>'+sold+' 串</b><span>烤糊</span><b>'+burntCount+' 串</b><span>Boss挑战</span><b>'+(bossResult==='win'?'击败！':bossRound?'没吃饱离开':'未出现')+'</b>';
   $('badge').classList.toggle('on',bossResult==='win');
   $('cmt').textContent=(bossResult==='win'?'大胃王都被你征服了！':bossRound?'差一点就喂饱大胃王了！':'')+['再接再厉！7姐相信你～','不错哦，夜市新人！','手艺真好，回头客多多！','烧烤大师！7姐给你点赞！'][st]+'（★ ¥'+STAR[0]+' · ★★ ¥'+STAR[1]+' · ★★★ ¥'+STAR[2]+'）';
+  const nb=recordRound(coins,bossResult==='win');$('earn').innerHTML='本局收入 <b>+¥'+coins+'</b>，存款 <b>¥'+SAVE.savings+'</b>'+(nb&&coins>0?'<span class="nb">新纪录！</span>':'');
   setTimeout(()=>{if(state==='over')show('over');},700);window.__bbqResult={coins,served,lost,burntCount,sold,stars:st,rejected,bossRound,bossResult};}
 
 // ================= 输入 =================
@@ -370,7 +411,9 @@ document.addEventListener('visibilitychange',()=>{if(document.hidden)setPause(tr
 addEventListener('keydown',e=>{if(e.code==='KeyP'||e.code==='Escape')setPause(!paused);if(e.code==='KeyM')muted=!muted;
   if(state==='play'&&!paused){if(e.code==='Digit1')tap({k:'tray',i:0});if(e.code==='Digit2')tap({k:'tray',i:1});if(e.code==='Digit3')tap({k:'tray',i:2});
     if(e.code==='KeyQ')tap({k:'tool',id:'salt'});if(e.code==='KeyW')tap({k:'tool',id:'chili'});if(e.code==='KeyE')tap({k:'tool',id:'flip'});}});
-$('startBtn').onclick=startGame;$('againBtn').onclick=startGame;$('resumeBtn').onclick=()=>setPause(false);
+$('startBtn').onclick=startGame;$('againBtn').onclick=startGame;$('wardBtn').onclick=()=>openWardrobe('start');$('wardBtn2').onclick=()=>openWardrobe('over');$('wClose').onclick=closeWardrobe;
+document.querySelectorAll('.tab').forEach(b=>b.onclick=()=>{W8.tab=b.dataset.tab;sfx('tool');buildGrid();});$('dYes').onclick=()=>closeDlg(true);$('dNo').onclick=()=>closeDlg(false);
+$('resetBtn').onclick=()=>{ensureAudio();askConfirm('真的要<b>重置存档</b>吗？<br><small>存款、衣服帽子和纪录都会清空</small>','重置','不要',ok=>{if(!ok)return;SAVE=defSave();saveNote='';persist();refreshSaveBar();sfx('trash');});};$('resumeBtn').onclick=()=>setPause(false);
 
 // ================= 绘制 =================
 function rr(x,y,w,h,r){ctx.beginPath();ctx.moveTo(x+r,y);ctx.arcTo(x+w,y,x+w,y+h,r);ctx.arcTo(x+w,y+h,x,y+h,r);ctx.arcTo(x,y+h,x,y,r);ctx.arcTo(x,y,x+w,y,r);ctx.closePath();}
@@ -648,7 +691,7 @@ function drawMascot(){if(!$('start').classList.contains('show'))return;const r=m
   const sc=h/232;ctx.save();const g=ctx.createRadialGradient(w/2,h*0.55,10,w/2,h*0.55,w*0.6);g.addColorStop(0,'rgba(255,200,150,.55)');g.addColorStop(1,'rgba(255,200,150,0)');ctx.fillStyle=g;ctx.fillRect(0,0,w,h);ctx.restore();
   drawBoss(w/2,h+2*sc,sc);ctx=save;}
 let mascotWave=2;
-function frame(t){const rdt=Math.min(0.05,(t-lastT)/1000);lastT=t;now+=rdt;if(!paused){fxUpdate(rdt);let dt=rdt*speed*(fx.slow>0?0.3:1);while(dt>0){const st=Math.min(dt,0.05);update(st);dt-=st;}}render();if(state==='start'){mascotWave-=rdt;if(mascotWave<=0){mascotWave=4;bossAct('happy',1.1);}}drawMascot();requestAnimationFrame(frame);}
+function frame(t){const rdt=Math.min(0.05,(t-lastT)/1000);lastT=t;now+=rdt;if(!paused){fxUpdate(rdt);let dt=rdt*speed*(fx.slow>0?0.3:1);while(dt>0){const st=Math.min(dt,0.05);update(st);dt-=st;}}render();if(state==='start'){mascotWave-=rdt;if(mascotWave<=0){mascotWave=4;bossAct('happy',1.1);}}drawMascot();drawWardPreview(rdt);requestAnimationFrame(frame);}
 // ================= 7姐 =================
 const boss={act:'idle',actT:0,actDur:0,say:'',sayT:0,blink:2.5,t:0,idleEv:5,wipe:0,shakeCol:'#fff'};
 const BOSS_HAPPY=['来啦～','趁热吃！','好吃再来～','香喷喷～','慢慢吃～','谢谢光临！'];
@@ -658,7 +701,7 @@ function bossUpdate(dt){boss.t+=dt;boss.blink-=dt;if(boss.blink<-0.13)boss.blink
   if(boss.act!=='idle'){boss.actT+=dt;if(boss.actT>=boss.actDur){boss.act='idle';boss.actT=0;}}
   boss.sayT=Math.max(0,boss.sayT-dt);boss.idleEv-=dt;
   if(boss.idleEv<=0&&boss.act==='idle'){boss.idleEv=rand(5,9);bossAct('wipe',1.3);}}
-function bossPose(){const t=boss.t,a=boss.act,k=boss.actDur?boss.actT/boss.actDur:0,env=Math.sin(Math.PI*clamp(k,0,1));
+function bossPose(still){const t=still?0:boss.t,a=still?'idle':boss.act,k=boss.actDur?boss.actT/boss.actDur:0,env=Math.sin(Math.PI*clamp(k,0,1));
   // 默认：右手扇火，左手拿夹子
   const P={sway:Math.sin(t*1.7)*0.035,bob:Math.sin(t*3.4)*1.5,
     rU:0.55,rF:-0.9+Math.sin(t*9)*0.25,fan:Math.sin(t*9)*0.45,rItem:'fan',
@@ -671,10 +714,12 @@ function bossPose(){const t=boss.t,a=boss.act,k=boss.actDur?boss.actT/boss.actDu
   else if(a==='ult'){const k1=clamp(k/0.2,0,1),e2=k<0.85?k1*k1*(3-2*k1):1-(k-0.85)/0.15;P.rU=lerp(0.55,2.95,e2);P.rF=lerp(-0.9,0.05,e2);P.rItem='fan';P.fan=Math.sin(t*16)*0.4*e2;P.lU=lerp(-0.35,-0.95,e2);P.lF=lerp(0.55,2.3,e2);P.lItem=e2>0.5?null:'tongs';P.face='laugh';P.eyes=e2>0.3?'wink':'open';P.sway=-0.07*e2;P.pop=1+0.08*e2+0.03*Math.sin(t*10)*e2;P.bob+=-8*e2;P.aura=e2;}
   else if(a==='wipe'){P.lU=lerp(-0.35,-2.6,env);P.lF=lerp(0.55,-2.1,env);P.lItem=env>0.5?null:'tongs';P.eyes=env>0.4?'happy':'open';P.face='phew';P.sweat=env>0.3;}
   return P;}
-function limb(x,y,u,f,l1,l2,w,sleeve){// 角度：0=向下，正=向画面右
+function limb(x,y,u,f,l1,l2,w,sleeve,sl,sx,cuff){// 角度：0=向下，正=向画面右
   const ex=x+Math.sin(u)*l1,ey=y+Math.cos(u)*l1,a2=u+f,hx=ex+Math.sin(a2)*l2,hy=ey+Math.cos(a2)*l2;
   ctx.lineCap='round';ctx.lineJoin='round';ctx.strokeStyle='#ffe3d1';ctx.lineWidth=w;ctx.beginPath();ctx.moveTo(x,y);ctx.lineTo(ex,ey);ctx.lineTo(hx,hy);ctx.stroke();
-  ctx.strokeStyle=sleeve;ctx.lineWidth=w+5;ctx.beginPath();ctx.moveTo(x,y);ctx.lineTo(x+Math.sin(u)*l1*0.45,y+Math.cos(u)*l1*0.45);ctx.stroke();
+  sl=sl||0.45;sx=sx||0;let px,py;if(sl<=1){px=x+Math.sin(u)*l1*sl;py=y+Math.cos(u)*l1*sl;}else{px=ex+Math.sin(a2)*l2*(sl-1);py=ey+Math.cos(a2)*l2*(sl-1);}
+  ctx.strokeStyle=sleeve;ctx.lineWidth=w+5+sx;ctx.beginPath();ctx.moveTo(x,y);if(sl>1)ctx.lineTo(ex,ey);ctx.lineTo(px,py);ctx.stroke();
+  if(cuff){const ax=sl>1?Math.sin(a2):Math.sin(u),ay=sl>1?Math.cos(a2):Math.cos(u);ctx.strokeStyle=cuff;ctx.lineWidth=w+6+sx;ctx.lineCap='butt';ctx.beginPath();ctx.moveTo(px-ax*3,py-ay*3);ctx.lineTo(px+ax*1.5,py+ay*1.5);ctx.stroke();ctx.lineCap='round';}
   ctx.fillStyle='#ffe3d1';ell(hx,hy,w*0.62,w*0.62);ctx.fill();return {hx,hy,ang:a2};}
 function drawBossItem(item,h,P){if(!item)return;ctx.save();ctx.translate(h.hx,h.hy);
   if(item==='fan'){ctx.rotate(-h.ang+Math.PI+P.fan);ctx.strokeStyle='#8a5a2a';ctx.lineWidth=4;ctx.beginPath();ctx.moveTo(0,0);ctx.lineTo(0,-22);ctx.stroke();
@@ -687,7 +732,7 @@ function drawBossItem(item,h,P){if(!item)return;ctx.save();ctx.translate(h.hx,h.
     else{ctx.fillStyle='#e8261a';rr(-9,-26,18,24,5);ctx.fill();ctx.fillStyle='#ffb300';rr(-9,-32,18,8,3);ctx.fill();ctx.fillStyle='#fff';ell(0,-14,4,4);ctx.fill();}
     const col=item==='salt'?'#ffffff':'#ff3b2a';ctx.fillStyle=col;for(let i=0;i<6;i++){const yy=-36-((boss.t*160+i*13)%40);ell(Math.sin(i*2.3+boss.t*9)*7,yy,1.8,1.8);ctx.fill();}}
   ctx.restore();}
-function drawBoss(x,base,s){const P=bossPose(),t=boss.t;ctx.save();ctx.translate(x,base+P.bob);ctx.scale(s*(P.pop||1),s*(P.pop||1));ctx.rotate(P.sway);
+function drawBoss(x,base,s,look,still){const P=bossPose(still),t=still?0:boss.t,LK=look||curLook(),OF=OUTFITS[LK.outfit]||OUTFITS.apron,HT=HATS[LK.hat]||null;ctx.save();ctx.translate(x,base+P.bob);ctx.scale(s*(P.pop||1),s*(P.pop||1));ctx.rotate(P.sway);
   if(P.aura){ctx.save();ctx.globalAlpha=P.aura;ctx.translate(0,-120);const ag0=ctx.createRadialGradient(0,0,10,0,0,150);ag0.addColorStop(0,'rgba(255,240,150,.9)');ag0.addColorStop(1,'rgba(255,180,40,0)');ctx.fillStyle=ag0;ell(0,0,150,150);ctx.fill();
     ctx.rotate(t*2);ctx.fillStyle='rgba(255,215,80,.45)';for(let r=0;r<10;r++){ctx.rotate(Math.PI/5);ctx.beginPath();ctx.moveTo(0,0);ctx.lineTo(150,-14);ctx.lineTo(150,14);ctx.fill();}ctx.restore();}
   const HAIR='#2e1f2f',HAIR2='#5a3a52',SKIN='#ffe6d6',hx=0,hy=-150,sw=Math.sin(t*2.1)*5;
@@ -699,18 +744,11 @@ function drawBoss(x,base,s){const P=bossPose(),t=boss.t;ctx.save();ctx.translate
   ctx.save();ctx.translate(38,-122);ctx.rotate(0.15+Math.sin(t*2.3)*0.08);ctx.fillStyle=hg;ctx.beginPath();ctx.moveTo(-8,0);ctx.bezierCurveTo(-16,30,4,60,-2,92);ctx.quadraticCurveTo(10,84,16,70);ctx.bezierCurveTo(22,40,10,20,10,0);ctx.closePath();ctx.fill();
   ctx.strokeStyle='rgba(255,255,255,.12)';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(2,8);ctx.bezierCurveTo(-4,34,10,56,6,80);ctx.stroke();
   ctx.fillStyle='#ff6f91';rr(-9,-3,20,8,4);ctx.fill();ctx.restore();
-  // —— 身体 ——
-  ctx.fillStyle='#fff4ea';ctx.beginPath();ctx.moveTo(-36,-96);ctx.quadraticCurveTo(-48,-90,-48,-70);ctx.lineTo(-40,0);ctx.lineTo(40,0);ctx.lineTo(48,-70);ctx.quadraticCurveTo(48,-90,36,-96);ctx.closePath();ctx.fill();
-  ctx.fillStyle=SKIN;rr(-9,-108,18,16,6);ctx.fill();ctx.fillStyle='#f3cdb8';ell(0,-95,10,4);ctx.fill();
-  // 围裙
-  const ag=ctx.createLinearGradient(0,-90,0,0);ag.addColorStop(0,'#ff6a4a');ag.addColorStop(1,'#e23a24');ctx.fillStyle=ag;
-  ctx.beginPath();ctx.moveTo(-24,-82);ctx.lineTo(24,-82);ctx.lineTo(28,-56);ctx.quadraticCurveTo(40,-50,42,0);ctx.lineTo(-42,0);ctx.quadraticCurveTo(-40,-50,-28,-56);ctx.closePath();ctx.fill();
-  ctx.strokeStyle='#fff';ctx.lineWidth=2.5;ctx.setLineDash([4,4]);ctx.stroke();ctx.setLineDash([]);
-  ctx.strokeStyle='#e23a24';ctx.lineWidth=5;ctx.beginPath();ctx.moveTo(-22,-82);ctx.lineTo(-12,-100);ctx.moveTo(22,-82);ctx.lineTo(12,-100);ctx.stroke();
-  ctx.fillStyle='#fff';ell(0,-46,15,15);ctx.fill();ctx.strokeStyle='#ffd23f';ctx.lineWidth=3;ctx.stroke();text('7',0,-45,20,'#e23a24','900');
-  ctx.fillStyle='rgba(255,255,255,.85)';rr(-30,-20,24,14,4);ctx.fill();
+  if(OF.back)OF.back(t);
+  // —— 身体（服装）——
+  OF.body(t);
   // —— 手臂（左：夹子，右：扇子）——
-  const L1=limb(-40,-86,P.lU,P.lF,30,28,11,'#fff4ea');drawBossItem(P.lItem,L1,P);
+  const L1=limb(-40,-86,P.lU,P.lF,30,28,11,OF.sleeve||'#fff4ea',OF.sl,OF.sx,OF.cuff);drawBossItem(P.lItem,L1,P);
   // —— 头 ——
   ctx.fillStyle=SKIN;ctx.beginPath();ctx.moveTo(-46,-160);ctx.bezierCurveTo(-48,-124,-24,-103,0,-102);ctx.bezierCurveTo(24,-103,48,-124,46,-160);ctx.bezierCurveTo(42,-202,-42,-202,-46,-160);ctx.fill();
   // 侧发
@@ -718,7 +756,7 @@ function drawBoss(x,base,s){const P=bossPose(),t=boss.t;ctx.save();ctx.translate
   // 眼睛
   const ey=-148;
   for(const d of[-1,1]){const ex=d*18;
-    const shut=P.eyes==='happy'||(P.eyes==='wink'&&d===1),closed=shut||(boss.blink<0&&P.eyes!=='wink');
+    const shut=P.eyes==='happy'||(P.eyes==='wink'&&d===1),closed=shut||(!still&&boss.blink<0&&P.eyes!=='wink');
     if(closed){ctx.strokeStyle='#2e1f2f';ctx.lineWidth=3.2;ctx.beginPath();if(shut)ctx.arc(ex,ey+4,9,Math.PI*1.15,Math.PI*1.85);else ctx.arc(ex,ey-2,9,Math.PI*0.15,Math.PI*0.85);ctx.stroke();
       ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(ex+d*9,ey-1);ctx.lineTo(ex+d*13,ey-4);ctx.stroke();continue;}
     ctx.fillStyle='#fff';ell(ex,ey,11,13);ctx.fill();
@@ -746,15 +784,12 @@ function drawBoss(x,base,s){const P=bossPose(),t=boss.t;ctx.save();ctx.translate
   ctx.beginPath();ctx.moveTo(-47,-160);ctx.bezierCurveTo(-50,-196,-20,-206,4,-204);ctx.bezierCurveTo(30,-204,50,-190,47,-160);
   ctx.quadraticCurveTo(40,-170,34,-166);ctx.quadraticCurveTo(30,-176,22,-164);ctx.quadraticCurveTo(14,-178,2,-168);ctx.quadraticCurveTo(-6,-182,-18,-166);ctx.quadraticCurveTo(-26,-176,-34,-164);ctx.quadraticCurveTo(-40,-170,-47,-160);ctx.fill();
   ctx.strokeStyle='rgba(255,255,255,.18)';ctx.lineWidth=2.5;ctx.beginPath();ctx.arc(-6,-178,26,Math.PI*1.12,Math.PI*1.5);ctx.stroke();
-  // 头巾
-  ctx.fillStyle='#e8452c';ctx.beginPath();ctx.moveTo(-46,-180);ctx.bezierCurveTo(-36,-212,36,-212,46,-180);ctx.quadraticCurveTo(0,-196,-46,-180);ctx.fill();
-  ctx.fillStyle='#fff';for(const [px,py] of [[-28,-195],[-8,-201],[14,-200],[32,-192],[2,-190]]){ell(px,py,2.6,2.2);ctx.fill();}
-  ctx.save();ctx.translate(44,-186);ctx.fillStyle='#e8452c';ell(0,0,7,6);ctx.fill();
-  for(const k of[0,1]){ctx.save();ctx.rotate(0.5+k*0.7+Math.sin(t*5+k)*0.15);ctx.beginPath();ctx.moveTo(0,0);ctx.quadraticCurveTo(14,-6,24,2);ctx.quadraticCurveTo(14,6,0,4);ctx.fill();ctx.restore();}ctx.restore();
+  // 帽子 / 头巾
+  if(HT)HT.draw(t);
   // 汗
   if(P.sweat){ctx.fillStyle='#8fd3ff';ctx.beginPath();ctx.moveTo(-40,-176);ctx.quadraticCurveTo(-33,-162,-40,-158);ctx.quadraticCurveTo(-47,-162,-40,-176);ctx.fill();ctx.fillStyle='rgba(255,255,255,.7)';ell(-41,-163,1.5,2.5);ctx.fill();}
   // 右手（扇子/调料）在最前
-  const R1=limb(40,-86,P.rU,P.rF,30,28,11,'#fff4ea');drawBossItem(P.rItem,R1,P);
+  const R1=limb(40,-86,P.rU,P.rF,30,28,11,OF.sleeve||'#fff4ea',OF.sl,OF.sx,OF.cuff);drawBossItem(P.rItem,R1,P);
   ctx.restore();}
 function drawBossSay(x,y,maxW){if(boss.sayT<=0||!boss.say)return;const el=(boss.sayDur||1.6)-boss.sayT,a=Math.min(1,boss.sayT*4),sc=el<0.15?lerp(0.6,1,el/0.15):1;
   ctx.save();ctx.globalAlpha=a;ctx.translate(x,y);ctx.scale(sc,sc);ctx.font='900 20px '+FONT;let fs=20,mw=ctx.measureText(boss.say).width;if(maxW&&mw+26>maxW){fs=Math.max(13,Math.floor(20*(maxW-24)/mw));ctx.font='900 '+fs+'px '+FONT;mw=ctx.measureText(boss.say).width;}const tw=Math.min(maxW||999,mw+26);
@@ -762,13 +797,212 @@ function drawBossSay(x,y,maxW){if(boss.sayT<=0||!boss.say)return;const el=(boss.
   ctx.fillStyle='#fff';ctx.beginPath();ctx.moveTo(4,14);ctx.lineTo(-12,26);ctx.lineTo(18,18);ctx.fill();
   text(boss.say,tw/2-6,1,fs,'#e8452c','900');ctx.restore();}
 
+// ================= 77的衣橱：服装 & 帽子 =================
+const SKIN0='#ffe6d6';
+function torsoPath(fl){fl=fl||0;ctx.beginPath();ctx.moveTo(-36,-96);ctx.quadraticCurveTo(-48,-90,-48,-70);ctx.lineTo(-40-fl,0);ctx.lineTo(40+fl,0);ctx.lineTo(48,-70);ctx.quadraticCurveTo(48,-90,36,-96);ctx.closePath();}
+function neck0(){ctx.fillStyle=SKIN0;rr(-9,-108,18,16,6);ctx.fill();ctx.fillStyle='#f3cdb8';ell(0,-95,10,4);ctx.fill();}
+function vgrad(a,b,y0,y1){const g=ctx.createLinearGradient(0,y0==null?-96:y0,0,y1==null?0:y1);g.addColorStop(0,a);g.addColorStop(1,b);return g;}
+function flower5(x,y,r,col,mid){ctx.fillStyle=col;for(let i=0;i<5;i++){const a=i*1.2566-1.57;ell(x+Math.cos(a)*r,y+Math.sin(a)*r,r*0.75,r*0.75);ctx.fill();}ctx.fillStyle=mid||'#ffd23f';ell(x,y,r*0.6,r*0.6);ctx.fill();}
+function star5(x,y,r,col){ctx.fillStyle=col;ctx.beginPath();for(let q=0;q<10;q++){const rr2=q%2?r*0.45:r,an=q*Math.PI/5-Math.PI/2;ctx.lineTo(x+Math.cos(an)*rr2,y+Math.sin(an)*rr2);}ctx.closePath();ctx.fill();}
+const OUTFITS={
+ apron:{name:'红色小围裙',price:0,sleeve:'#fff4ea',body(t){
+  ctx.fillStyle='#fff4ea';ctx.beginPath();ctx.moveTo(-36,-96);ctx.quadraticCurveTo(-48,-90,-48,-70);ctx.lineTo(-40,0);ctx.lineTo(40,0);ctx.lineTo(48,-70);ctx.quadraticCurveTo(48,-90,36,-96);ctx.closePath();ctx.fill();
+  ctx.fillStyle=SKIN0;rr(-9,-108,18,16,6);ctx.fill();ctx.fillStyle='#f3cdb8';ell(0,-95,10,4);ctx.fill();
+  const ag=ctx.createLinearGradient(0,-90,0,0);ag.addColorStop(0,'#ff6a4a');ag.addColorStop(1,'#e23a24');ctx.fillStyle=ag;
+  ctx.beginPath();ctx.moveTo(-24,-82);ctx.lineTo(24,-82);ctx.lineTo(28,-56);ctx.quadraticCurveTo(40,-50,42,0);ctx.lineTo(-42,0);ctx.quadraticCurveTo(-40,-50,-28,-56);ctx.closePath();ctx.fill();
+  ctx.strokeStyle='#fff';ctx.lineWidth=2.5;ctx.setLineDash([4,4]);ctx.stroke();ctx.setLineDash([]);
+  ctx.strokeStyle='#e23a24';ctx.lineWidth=5;ctx.beginPath();ctx.moveTo(-22,-82);ctx.lineTo(-12,-100);ctx.moveTo(22,-82);ctx.lineTo(12,-100);ctx.stroke();
+  ctx.fillStyle='#fff';ell(0,-46,15,15);ctx.fill();ctx.strokeStyle='#ffd23f';ctx.lineWidth=3;ctx.stroke();text('7',0,-45,20,'#e23a24','900');
+  ctx.fillStyle='rgba(255,255,255,.85)';rr(-30,-20,24,14,4);ctx.fill();}},
+ qipao:{name:'红色旗袍',price:200,sleeve:'#c8142e',cuff:'#ffd23f',body(t){
+  torsoPath(-2);ctx.fillStyle=vgrad('#e2283e','#a50f26');ctx.fill();ctx.strokeStyle='#ffd23f';ctx.lineWidth=2.5;ctx.stroke();
+  neck0();rr(-13,-106,26,12,6);ctx.fillStyle='#c8142e';ctx.fill();ctx.strokeStyle='#ffd23f';ctx.lineWidth=2.5;ctx.stroke();
+  ctx.strokeStyle='#ffd23f';ctx.lineWidth=3.5;ctx.beginPath();ctx.moveTo(-2,-95);ctx.quadraticCurveTo(22,-90,28,-72);ctx.lineTo(32,-56);ctx.stroke();
+  ctx.fillStyle='#ffd23f';for(const [x,y] of [[12,-90],[26,-74],[30,-60]]){ell(x,y,3.5,2.5);ctx.fill();ctx.fillRect(x-7,y-1,14,2);}
+  ctx.strokeStyle='rgba(255,215,90,.75)';ctx.lineWidth=1.6;for(const [x,y,r] of [[-20,-56,9],[10,-30,11],[-16,-16,7],[24,-12,6]]){for(let i=0;i<5;i++){const a=i*1.2566;ctx.beginPath();ctx.arc(x+Math.cos(a)*r*0.6,y+Math.sin(a)*r*0.6,r*0.45,0,6.283);ctx.stroke();}}
+  ctx.strokeStyle='#ffd23f';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(-38,-30);ctx.quadraticCurveTo(-30,-20,-34,-8);ctx.stroke();}},
+ hanfu:{name:'粉色汉服',price:220,sleeve:'#ffc2d6',sl:1.85,sx:12,cuff:'#fff4f8',body(t){
+  torsoPath(8);ctx.fillStyle=vgrad('#ffd3e2','#ff9ec0');ctx.fill();
+  neck0();ctx.fillStyle='#fffaf6';ctx.beginPath();ctx.moveTo(-16,-98);ctx.lineTo(0,-66);ctx.lineTo(16,-98);ctx.closePath();ctx.fill();
+  ctx.strokeStyle='#e8608c';ctx.lineWidth=7;ctx.lineCap='round';ctx.beginPath();ctx.moveTo(-22,-97);ctx.lineTo(16,-56);ctx.moveTo(22,-97);ctx.lineTo(4,-74);ctx.stroke();
+  ctx.strokeStyle='#fff';ctx.lineWidth=1.5;ctx.beginPath();ctx.moveTo(-22,-92);ctx.lineTo(13,-53);ctx.stroke();
+  ctx.fillStyle='#e8608c';rr(-46,-56,92,14,6);ctx.fill();ctx.fillStyle='#ffd23f';rr(-46,-50,92,3,1);ctx.fill();
+  const sw=Math.sin(t*3)*3;ctx.fillStyle='#ff7aa5';for(const d of[-1,1]){ctx.beginPath();ctx.moveTo(d*4,-46);ctx.quadraticCurveTo(d*8+sw,-26,d*6+sw,-8);ctx.lineTo(d*12+sw,-10);ctx.quadraticCurveTo(d*12+sw,-28,d*10,-46);ctx.fill();}
+  ell(0,-49,7,7);ctx.fill();ctx.strokeStyle='rgba(220,90,140,.35)';ctx.lineWidth=1.5;for(const x of[-30,-18,18,30]){ctx.beginPath();ctx.moveTo(x,-40);ctx.lineTo(x*1.15,0);ctx.stroke();}
+  flower5(-26,-74,3.2,'#fff','#ff7aa5');flower5(30,-20,3,'#fff','#ff7aa5');}},
+ floral:{name:'夏日碎花裙',price:180,sleeve:'#fffdf4',sl:0.55,sx:9,cuff:'#ffb3c6',body(t){
+  torsoPath(12);ctx.fillStyle=vgrad('#fff3a8','#ffd86a');ctx.fill();
+  neck0();ctx.fillStyle=SKIN0;rr(-17,-100,34,16,7);ctx.fill();ctx.strokeStyle='#fff';ctx.lineWidth=3;ctx.beginPath();ctx.moveTo(-18,-84);ctx.lineTo(18,-84);ctx.stroke();
+  ctx.fillStyle='#ff8fab';rr(-45,-60,90,6,3);ctx.fill();ctx.save();ctx.translate(22,-57);ctx.fillStyle='#ff6f91';ell(-7,0,7,5);ctx.fill();ell(7,0,7,5);ctx.fill();ell(0,0,3.5,3.5);ctx.fill();ctx.restore();
+  const F=[[-30,-76,'#ff7aa5'],[30,-74,'#7ec8ff'],[-12,-44,'#ffffff'],[16,-36,'#ff7aa5'],[-34,-28,'#7ec8ff'],[34,-22,'#ffffff'],[-8,-14,'#ff7aa5'],[20,-8,'#7ec8ff'],[-26,-6,'#ffffff'],[4,-68,'#ffffff']];
+  for(const [x,y,c] of F){flower5(x,y,2.6,c,'#ffb300');}
+  ctx.fillStyle='#7ccf6a';for(const [x,y] of [[-25,-72],[35,-70],[-7,-40],[21,-32],[-29,-24]]){ell(x,y,2.5,1.4);ctx.fill();}}},
+ chef:{name:'小厨师服',price:190,sleeve:'#fbfcfd',sl:1.8,cuff:'#dde4ea',body(t){
+  torsoPath(0);ctx.fillStyle=vgrad('#ffffff','#e3e9ef');ctx.fill();ctx.strokeStyle='#c9d2da';ctx.lineWidth=2;ctx.stroke();
+  neck0();rr(-14,-104,28,10,4);ctx.fillStyle='#fff';ctx.fill();ctx.strokeStyle='#c9d2da';ctx.lineWidth=2;ctx.stroke();
+  ctx.fillStyle='#e8452c';ctx.beginPath();ctx.moveTo(-13,-96);ctx.lineTo(13,-96);ctx.lineTo(0,-80);ctx.closePath();ctx.fill();ell(0,-95,5,4);ctx.fill();
+  ctx.strokeStyle='#c9d2da';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(-4,-90);ctx.quadraticCurveTo(-26,-70,-24,0);ctx.stroke();
+  ctx.fillStyle='#8a96a2';for(const y of[-70,-50,-30,-10]){ell(-14,y,3.6,3.6);ctx.fill();ell(16,y,3.6,3.6);ctx.fill();}
+  ctx.strokeStyle='#c9d2da';rr(22,-80,16,12,3);ctx.stroke();text('7',30,-73,11,'#e8452c','900');}},
+ sailor:{name:'水手服',price:200,sleeve:'#ffffff',sl:0.6,cuff:'#1f3a7a',body(t){
+  torsoPath(2);ctx.fillStyle=vgrad('#ffffff','#eef2f8');ctx.fill();
+  ctx.fillStyle='#1f3a7a';rr(-41,-16,82,16,2);ctx.fill();ctx.strokeStyle='rgba(255,255,255,.35)';ctx.lineWidth=1.5;for(let x=-32;x<=32;x+=10){ctx.beginPath();ctx.moveTo(x,-16);ctx.lineTo(x,0);ctx.stroke();}
+  neck0();ctx.fillStyle='#1f3a7a';ctx.beginPath();ctx.moveTo(-38,-96);ctx.lineTo(-46,-72);ctx.lineTo(0,-50);ctx.lineTo(46,-72);ctx.lineTo(38,-96);ctx.lineTo(12,-99);ctx.lineTo(0,-70);ctx.lineTo(-12,-99);ctx.closePath();ctx.fill();
+  ctx.strokeStyle='#fff';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(-35,-92);ctx.lineTo(-41,-73);ctx.lineTo(0,-55);ctx.lineTo(41,-73);ctx.lineTo(35,-92);ctx.stroke();
+  ctx.fillStyle='#e8263a';ctx.save();ctx.translate(0,-58);ell(-11,0,11,7);ctx.fill();ell(11,0,11,7);ctx.fill();ctx.beginPath();ctx.moveTo(-3,2);ctx.lineTo(-10,22);ctx.lineTo(-3,20);ctx.lineTo(0,4);ctx.lineTo(3,20);ctx.lineTo(10,22);ctx.lineTo(3,2);ctx.fill();ctx.fillStyle='#b8102a';ell(0,0,4.5,4.5);ctx.fill();ctx.restore();
+  star5(30,-30,5,'#ffd23f');}},
+ bear:{name:'小熊连体睡衣',price:210,sleeve:'#b9825a',sl:2,sx:3,cuff:'#f5dcbc',
+  back(t){ctx.fillStyle='#a8714c';ell(0,-100,44,17);ctx.fill();for(const d of[-1,1]){ell(d*42,-108,12,12);ctx.fill();ctx.fillStyle='#f5c9a8';ell(d*42,-108,6,6);ctx.fill();ctx.fillStyle='#a8714c';}},
+  body(t){torsoPath(5);ctx.fillStyle=vgrad('#c48d62','#a46e48');ctx.fill();
+  neck0();ctx.fillStyle='#f5dcbc';ell(0,-40,27,33);ctx.fill();ctx.strokeStyle='#a8714c';ctx.lineWidth=2;ctx.setLineDash([3,3]);ell(0,-40,22,28);ctx.stroke();ctx.setLineDash([]);
+  ctx.fillStyle='#ff8fa3';ctx.beginPath();ctx.moveTo(0,-46);ctx.bezierCurveTo(-9,-56,-16,-44,0,-34);ctx.bezierCurveTo(16,-44,9,-56,0,-46);ctx.fill();
+  ctx.fillStyle='#8a5a38';for(const y of[-88,-76]){ell(0,y,3,3);ctx.fill();}ctx.fillStyle='#d9a37a';ell(-28,-84,6,4);ctx.fill();ell(28,-84,6,4);ctx.fill();}},
+ princess:{name:'公主裙',price:220,sleeve:'#f2c4ff',sl:0.55,sx:10,cuff:'#ffffff',body(t){
+  torsoPath(16);ctx.fillStyle=vgrad('#f6d2ff','#c38cf0');ctx.fill();
+  ctx.fillStyle='rgba(255,255,255,.75)';for(let x=-50;x<=50;x+=11){ell(x,-2,7,6);ctx.fill();}ctx.fillStyle='#e4a8ff';for(let x=-46;x<=46;x+=11){ell(x,-22,6,5);ctx.fill();}
+  ctx.fillStyle='#b072e8';ctx.beginPath();ctx.moveTo(-30,-64);ctx.lineTo(0,-46);ctx.lineTo(30,-64);ctx.lineTo(28,-70);ctx.lineTo(0,-54);ctx.lineTo(-28,-70);ctx.closePath();ctx.fill();
+  neck0();ctx.fillStyle='#fff';for(let x=-20;x<=20;x+=6.6){ell(x,-95,4.2,4.2);ctx.fill();}
+  ctx.fillStyle='#ffd23f';ell(0,-80,7,7);ctx.fill();ctx.fillStyle='#ff5fa2';ell(0,-80,4.5,4.5);ctx.fill();ctx.fillStyle='#fff';ell(-1.5,-81.5,1.4,1.4);ctx.fill();
+  ctx.fillStyle='rgba(255,255,255,.8)';for(const [x,y] of [[-24,-36],[20,-30],[-6,-14],[32,-12]]){star5(x,y,2.6,'rgba(255,255,255,.85)');}}},
+ idol:{name:'偶像演出服',price:210,sleeve:'#2ec9c0',sl:0.95,cuff:'#ffd23f',body(t){
+  torsoPath(4);ctx.fillStyle='#ffffff';ctx.fill();
+  ctx.fillStyle='#ff6fae';ctx.beginPath();ctx.moveTo(-44,-16);for(let k=0;k<=8;k++)ctx.lineTo(-44+k*11,k%2?0:-6);ctx.lineTo(44,-20);ctx.lineTo(-44,-20);ctx.closePath();ctx.fill();
+  const jg=vgrad('#45e0d0','#1898b0');ctx.fillStyle=jg;for(const d of[-1,1]){ctx.beginPath();ctx.moveTo(d*36,-96);ctx.quadraticCurveTo(d*48,-90,d*48,-70);ctx.lineTo(d*42,-18);ctx.lineTo(d*16,-18);ctx.lineTo(d*12,-90);ctx.closePath();ctx.fill();
+    ctx.strokeStyle='#ffd23f';ctx.lineWidth=2.5;ctx.beginPath();ctx.moveTo(d*12,-90);ctx.lineTo(d*16,-18);ctx.stroke();}
+  neck0();ctx.fillStyle='#ff5fa2';ctx.save();ctx.translate(0,-84);ctx.beginPath();ctx.moveTo(0,0);ctx.lineTo(-15,-8);ctx.lineTo(-15,8);ctx.closePath();ctx.fill();ctx.beginPath();ctx.moveTo(0,0);ctx.lineTo(15,-8);ctx.lineTo(15,8);ctx.closePath();ctx.fill();ell(0,0,4,4);ctx.fill();ctx.restore();
+  star5(-30,-60,6,'#ffd23f');star5(32,-44,5,'#ffd23f');star5(-26,-34,3.5,'#fff3a0');
+  for(let i=0;i<5;i++){const a=0.5+0.5*Math.sin(t*6+i*1.7);ctx.globalAlpha=a;star5([-36,30,-20,36,6][i],[-80,-70,-50,-28,-64][i],2.4,'#ffffff');}ctx.globalAlpha=1;}},
+ sweater:{name:'冬季毛衣',price:190,sleeve:'#2f8f4e',sl:2,sx:3,cuff:'#c62828',body(t){
+  torsoPath(3);ctx.fillStyle=vgrad('#38a05a','#257a40');ctx.fill();
+  ctx.fillStyle='#c62828';rr(-48,-76,96,6,2);ctx.fill();rr(-47,-58,94,6,2);ctx.fill();
+  ctx.strokeStyle='#fff';ctx.lineWidth=2.5;ctx.beginPath();ctx.moveTo(-47,-66);for(let k=0;k<=12;k++)ctx.lineTo(-47+k*7.8,k%2?-70:-62);ctx.stroke();
+  ctx.fillStyle='#1f6a36';ctx.beginPath();ctx.moveTo(0,-48);ctx.lineTo(-14,-22);ctx.lineTo(14,-22);ctx.closePath();ctx.fill();ctx.beginPath();ctx.moveTo(0,-40);ctx.lineTo(-18,-10);ctx.lineTo(18,-10);ctx.closePath();ctx.fill();star5(0,-50,5,'#ffd23f');
+  ctx.fillStyle='#ff5a4a';ell(-6,-28,2.2,2.2);ctx.fill();ell(7,-18,2.2,2.2);ctx.fill();ctx.fillStyle='#ffd23f';ell(5,-32,2,2);ctx.fill();
+  ctx.strokeStyle='#fff';ctx.lineWidth=1.6;for(const [x,y] of [[-28,-30],[28,-30],[-30,-12],[30,-12]]){for(let k=0;k<3;k++){const a=k*Math.PI/3;ctx.beginPath();ctx.moveTo(x-Math.cos(a)*5,y-Math.sin(a)*5);ctx.lineTo(x+Math.cos(a)*5,y+Math.sin(a)*5);ctx.stroke();}}
+  ctx.strokeStyle='rgba(0,0,0,.15)';ctx.lineWidth=1.5;for(let x=-38;x<=38;x+=5){ctx.beginPath();ctx.moveTo(x,-7);ctx.lineTo(x,0);ctx.stroke();}
+  neck0();rr(-14,-108,28,16,7);ctx.fillStyle='#2f8f4e';ctx.fill();ctx.strokeStyle='rgba(0,0,0,.18)';ctx.lineWidth=1.5;for(let x=-10;x<=10;x+=4){ctx.beginPath();ctx.moveTo(x,-106);ctx.lineTo(x,-94);ctx.stroke();}}}
+};
+const HATS={
+ bandana:{name:'红头巾',price:0,draw(t){
+  ctx.fillStyle='#e8452c';ctx.beginPath();ctx.moveTo(-46,-180);ctx.bezierCurveTo(-36,-212,36,-212,46,-180);ctx.quadraticCurveTo(0,-196,-46,-180);ctx.fill();
+  ctx.fillStyle='#fff';for(const [px,py] of [[-28,-195],[-8,-201],[14,-200],[32,-192],[2,-190]]){ell(px,py,2.6,2.2);ctx.fill();}
+  ctx.save();ctx.translate(44,-186);ctx.fillStyle='#e8452c';ell(0,0,7,6);ctx.fill();
+  for(const k of[0,1]){ctx.save();ctx.rotate(0.5+k*0.7+Math.sin(t*5+k)*0.15);ctx.beginPath();ctx.moveTo(0,0);ctx.quadraticCurveTo(14,-6,24,2);ctx.quadraticCurveTo(14,6,0,4);ctx.fill();ctx.restore();}ctx.restore();}},
+ chefhat:{name:'小厨师帽',price:190,draw(t){ctx.save();ctx.translate(0,9);ctx.rotate(0.06);
+  ctx.fillStyle='#fff';ctx.strokeStyle='#cfd8e0';ctx.lineWidth=2;
+  for(const [x,y,r] of [[-26,-224,17],[26,-224,17],[-12,-238,19],[12,-238,19],[0,-246,17]]){ell(x,y,r,r);ctx.fill();ctx.stroke();}
+  ctx.fillRect(-34,-230,68,24);rr(-38,-210,76,22,8);ctx.fill();ctx.stroke();
+  ctx.strokeStyle='#e3e9ef';ctx.lineWidth=2;for(const x of[-18,0,18]){ctx.beginPath();ctx.moveTo(x,-226);ctx.lineTo(x,-212);ctx.stroke();}text('7',0,-199,12,'#e8452c','900');ctx.restore();}},
+ catears:{name:'猫耳发箍',price:180,draw(t){const tw=Math.sin(t*1.3)>0.92?0.18:0;
+  for(const d of[-1,1]){ctx.save();ctx.translate(d*28,-196);ctx.rotate(d*(0.35+(d>0?tw:0)));ctx.fillStyle='#2e1f2f';ctx.beginPath();ctx.moveTo(-14,6);ctx.lineTo(0,-30);ctx.lineTo(14,6);ctx.closePath();ctx.fill();
+    ctx.fillStyle='#ff9ec0';ctx.beginPath();ctx.moveTo(-7,2);ctx.lineTo(0,-19);ctx.lineTo(7,2);ctx.closePath();ctx.fill();ctx.restore();}
+  ctx.strokeStyle='#ff6f91';ctx.lineWidth=5;ctx.lineCap='round';ctx.beginPath();ctx.arc(0,-160,45,Math.PI*1.13,Math.PI*1.87);ctx.stroke();
+  ctx.fillStyle='#ffd23f';ell(22,-196,4,4);ctx.fill();}},
+ bunny:{name:'兔耳发箍',price:190,draw(t){
+  for(const d of[-1,1]){ctx.save();ctx.translate(d*16,-198);ctx.rotate(d*0.22+Math.sin(t*2+d)*0.05);ctx.fillStyle='#fff';ctx.strokeStyle='#f0c9d6';ctx.lineWidth=2;
+    if(d>0){ctx.beginPath();ctx.moveTo(-9,0);ctx.bezierCurveTo(-12,-30,-8,-44,2,-46);ctx.quadraticCurveTo(20,-50,22,-38);ctx.quadraticCurveTo(10,-36,9,-24);ctx.lineTo(9,0);ctx.closePath();ctx.fill();ctx.stroke();
+      ctx.fillStyle='#ffc2d6';ctx.beginPath();ctx.moveTo(-4,-2);ctx.bezierCurveTo(-6,-26,-3,-38,2,-40);ctx.quadraticCurveTo(4,-30,4,-2);ctx.fill();}
+    else{ell(0,-30,10,32);ctx.fill();ctx.stroke();ctx.fillStyle='#ffc2d6';ell(0,-28,5,23);ctx.fill();}ctx.restore();}
+  ctx.strokeStyle='#fff';ctx.lineWidth=6;ctx.lineCap='round';ctx.beginPath();ctx.arc(0,-160,45,Math.PI*1.13,Math.PI*1.87);ctx.stroke();ctx.strokeStyle='#ffc2d6';ctx.lineWidth=2;ctx.stroke();}},
+ straw:{name:'草帽',price:200,draw(t){ctx.save();ctx.rotate(-0.06);
+  ctx.fillStyle='#e8c070';ell(0,-194,70,15);ctx.fill();ctx.strokeStyle='#c9a050';ctx.lineWidth=2;ctx.stroke();
+  ctx.strokeStyle='rgba(160,120,50,.45)';ctx.lineWidth=1.2;for(let r=58;r>40;r-=7){ell(0,-194,r,r*0.21);ctx.stroke();}
+  ctx.fillStyle='#f2cf80';ctx.beginPath();ctx.moveTo(-40,-196);ctx.bezierCurveTo(-42,-232,42,-232,40,-196);ctx.closePath();ctx.fill();ctx.strokeStyle='#c9a050';ctx.lineWidth=2;ctx.stroke();
+  ctx.fillStyle='#e8452c';ctx.beginPath();ctx.moveTo(-40,-198);ctx.quadraticCurveTo(0,-192,40,-198);ctx.lineTo(41,-207);ctx.quadraticCurveTo(0,-201,-41,-207);ctx.closePath();ctx.fill();
+  flower5(30,-204,3.6,'#fff','#ffd23f');ctx.restore();}},
+ crown:{name:'小皇冠',price:220,draw(t){ctx.save();ctx.translate(6,-204);ctx.rotate(0.12);
+  const g=ctx.createLinearGradient(0,-28,0,6);g.addColorStop(0,'#fff3a0');g.addColorStop(1,'#e8a200');ctx.fillStyle=g;
+  ctx.beginPath();ctx.moveTo(-24,4);ctx.lineTo(-28,-20);ctx.lineTo(-14,-8);ctx.lineTo(0,-28);ctx.lineTo(14,-8);ctx.lineTo(28,-20);ctx.lineTo(24,4);ctx.closePath();ctx.fill();ctx.strokeStyle='#b07800';ctx.lineWidth=2;ctx.stroke();
+  ctx.fillStyle='#ff5fa2';ell(0,-6,4.5,4.5);ctx.fill();ctx.fillStyle='#4fb3ff';ell(-14,-2,3,3);ctx.fill();ell(14,-2,3,3);ctx.fill();
+  ctx.fillStyle='#fff';for(const [x,y] of [[-28,-20],[0,-28],[28,-20]]){ell(x,y,3,3);ctx.fill();}
+  ctx.globalAlpha=0.5+0.5*Math.sin(t*5);star5(-6,-16,3,'#fff');ctx.globalAlpha=1;ctx.restore();}},
+ bow:{name:'蝴蝶结',price:180,draw(t){ctx.save();ctx.translate(26,-198);ctx.rotate(0.35+Math.sin(t*2)*0.04);
+  ctx.fillStyle='#ff6f91';for(const d of[-1,1]){ctx.beginPath();ctx.moveTo(0,0);ctx.bezierCurveTo(d*16,-22,d*34,-14,d*30,2);ctx.bezierCurveTo(d*34,16,d*16,20,0,0);ctx.fill();}
+  ctx.beginPath();ctx.moveTo(-3,2);ctx.lineTo(-12,26);ctx.lineTo(-4,23);ctx.lineTo(0,4);ctx.lineTo(4,23);ctx.lineTo(12,26);ctx.lineTo(3,2);ctx.fill();
+  ctx.fillStyle='#fff';for(const [x,y] of [[-20,-6],[-14,6],[20,-6],[15,7],[-24,4],[25,3]]){ell(x,y,2.2,2.2);ctx.fill();}
+  ctx.fillStyle='#e8456f';ell(0,0,6,6);ctx.fill();ctx.restore();}},
+ beret:{name:'贝雷帽',price:200,draw(t){ctx.save();ctx.translate(-4,-196);ctx.rotate(-0.16);
+  const g=ctx.createRadialGradient(-10,-14,4,0,-8,56);g.addColorStop(0,'#d24a64');g.addColorStop(1,'#962a42');ctx.fillStyle=g;
+  ctx.beginPath();ctx.moveTo(-50,4);ctx.bezierCurveTo(-60,-22,-20,-30,6,-28);ctx.bezierCurveTo(44,-26,62,-12,48,4);ctx.quadraticCurveTo(0,12,-50,4);ctx.fill();
+  ctx.fillStyle='#7a1e34';rr(-44,0,90,6,3);ctx.fill();ctx.strokeStyle='#7a1e34';ctx.lineWidth=4;ctx.lineCap='round';ctx.beginPath();ctx.moveTo(4,-28);ctx.lineTo(6,-36);ctx.stroke();
+  ctx.fillStyle='rgba(255,255,255,.18)';ell(-14,-16,18,6);ctx.fill();ctx.restore();}},
+ santa:{name:'圣诞帽',price:210,draw(t){const sw=Math.sin(t*2.2)*4;
+  ctx.fillStyle='#d8263a';ctx.beginPath();ctx.moveTo(-44,-196);ctx.bezierCurveTo(-40,-236,10,-252,40+sw,-238);ctx.quadraticCurveTo(58+sw,-226,58+sw,-208);ctx.quadraticCurveTo(40,-226,30,-224);ctx.quadraticCurveTo(44,-206,44,-196);ctx.closePath();ctx.fill();
+  ctx.fillStyle='rgba(0,0,0,.12)';ctx.beginPath();ctx.moveTo(10,-240);ctx.quadraticCurveTo(30,-232,30,-224);ctx.quadraticCurveTo(14,-228,10,-240);ctx.fill();
+  ctx.fillStyle='#fff';rr(-50,-206,100,18,9);ctx.fill();ell(58+sw,-206,9,9);ctx.fill();ctx.fillStyle='rgba(200,210,230,.6)';for(let x=-40;x<=40;x+=12){ell(x,-197,3,2);ctx.fill();}}},
+ wreath:{name:'花环',price:200,draw(t){const cols=['#ff7aa5','#ffd23f','#ffffff','#b48cff','#ff9f5a'];
+  ctx.strokeStyle='#5aa84a';ctx.lineWidth=4;ctx.beginPath();ctx.ellipse(0,-182,46,20,0,Math.PI*1.02,Math.PI*1.98);ctx.stroke();
+  for(let i=0;i<9;i++){const a=Math.PI*(1.05+i*0.9/8),x=Math.cos(a)*46,y=-182+Math.sin(a)*20;ctx.fillStyle='#6cc25a';ell(x+5,y+3,5,2.5);ctx.fill();flower5(x,y,4.2+(i%2)*1.2,cols[i%5],i%5===1?'#ff7a3a':'#ffd23f');}}}
+};
+const OUTFIT_IDS=Object.keys(OUTFITS),HAT_IDS=Object.keys(HATS);
+// ================= 存档 =================
+const SAVE_KEY='qijie-bbq-save-v1';
+function defSave(){return {v:1,savings:0,best:0,rounds:0,bossWins:0,owned:{outfit:['apron'],hat:['bandana']},outfit:'apron',hat:'bandana'};}
+let storageOK=true,saveNote='';
+function sanitizeSave(d){const s=defSave();if(!d||typeof d!=='object'||Array.isArray(d))return s;const num=v=>{v=Number(v);return Number.isFinite(v)&&v>=0?Math.min(1e9,Math.floor(v)):0;};
+  s.savings=num(d.savings);s.best=num(d.best);s.rounds=num(d.rounds);s.bossWins=num(d.bossWins);
+  for(const k of['outfit','hat']){const valid=k==='outfit'?OUTFITS:HATS,list=d.owned&&Array.isArray(d.owned[k])?d.owned[k]:[];for(const id of list)if(typeof id==='string'&&Object.prototype.hasOwnProperty.call(valid,id)&&!s.owned[k].includes(id))s.owned[k].push(id);}
+  if(typeof d.outfit==='string'&&s.owned.outfit.includes(d.outfit))s.outfit=d.outfit;
+  if(d.hat==='none'||(typeof d.hat==='string'&&s.owned.hat.includes(d.hat)))s.hat=d.hat;return s;}
+function loadSave(){let raw=null;try{raw=window.localStorage.getItem(SAVE_KEY);}catch(e){storageOK=false;saveNote='（浏览器不能保存进度，关掉页面后存款会消失）';return defSave();}
+  if(raw==null)return defSave();let d=null;try{d=JSON.parse(raw);}catch(e){d=null;}
+  if(!d||typeof d!=='object'){saveNote='存档损坏，已重新开始～';try{localStorage.setItem(SAVE_KEY+'-bad',String(raw).slice(0,5000));}catch(e){}}
+  return sanitizeSave(d);}
+function persist(){try{window.localStorage.setItem(SAVE_KEY,JSON.stringify(SAVE));storageOK=true;}catch(e){storageOK=false;saveNote='（浏览器不能保存进度，关掉页面后存款会消失）';}}
+let SAVE=loadSave();
+function curLook(){return {outfit:SAVE.outfit,hat:SAVE.hat};}
+function refreshSaveBar(){const el=$('saveBar');if(el)el.innerHTML='<span>存款 <b>¥'+SAVE.savings+'</b></span><span>最高 <b>¥'+SAVE.best+'</b></span><span>营业 <b>'+SAVE.rounds+'</b> 局</span>'+(SAVE.bossWins?'<span>击败Boss <b>'+SAVE.bossWins+'</b> 次</span>':'')+(saveNote?'<em>'+saveNote+'</em>':'');}
+function recordRound(income,win){SAVE.savings+=income;SAVE.rounds++;const nb=income>SAVE.best;if(nb)SAVE.best=income;if(win)SAVE.bossWins++;persist();refreshSaveBar();return nb;}
+// ================= 对话框 =================
+let dlgCb=null;
+function askConfirm(msg,yes,no,cb){$('dText').innerHTML=msg;$('dYes').textContent=yes||'确定';$('dNo').textContent=no||'取消';dlgCb=cb;$('dlg').classList.add('show');}
+function closeDlg(ok){$('dlg').classList.remove('show');const cb=dlgCb;dlgCb=null;if(cb)cb(ok);}
+// ================= 衣橱界面 =================
+const W8={tab:'outfit',from:'start',tryOutfit:null,tryHat:null,spark:[],msgT:0};
+function lookPreview(){return {outfit:W8.tryOutfit||SAVE.outfit,hat:W8.tryHat||SAVE.hat};}
+function openWardrobe(from){ensureAudio();W8.from=from;W8.tryOutfit=null;W8.tryHat=null;wMsg('点一件试穿～已拥有的直接换上哦','#a0704a');buildGrid();show('wardrobe');}
+function closeWardrobe(){W8.tryOutfit=null;W8.tryHat=null;show(W8.from);refreshSaveBar();}
+function wMsg(t,col){const m=$('wMsg');m.textContent=t;m.style.color=col||'#e8452c';}
+function drawLookOn(cv,look,mode){const d=window.devicePixelRatio||1,r=cv.getBoundingClientRect(),cw=Math.max(40,Math.round((r.width||90)*d)),ch=Math.max(40,Math.round((r.height||90)*d));
+  if(cv.width!==cw||cv.height!==ch){cv.width=cw;cv.height=ch;}const c2=cv.getContext('2d'),save=ctx;ctx=c2;ctx.setTransform(1,0,0,1,0,0);ctx.clearRect(0,0,cw,ch);
+  try{if(mode==='hat'){const s=ch/172;drawBoss(cw/2,ch*1.5,s,look,true);}else{const s=ch/262;drawBoss(cw/2,ch+4*s,s,look,true);}}finally{ctx=save;}}
+function buildGrid(){const g=$('wGrid');g.innerHTML='';const tab=W8.tab,ids=tab==='outfit'?OUTFIT_IDS:HAT_IDS.concat(['none']),DB=tab==='outfit'?OUTFITS:HATS;
+  document.querySelectorAll('.tab').forEach(b=>b.classList.toggle('on',b.dataset.tab===tab));
+  const pv=lookPreview();
+  for(const id of ids){const it=id==='none'?{name:'不戴帽子',price:0}:DB[id],owned=id==='none'||SAVE.owned[tab].includes(id),eq=SAVE[tab]===id,tr=(tab==='outfit'?W8.tryOutfit:W8.tryHat)===id;
+    const b=document.createElement('button');b.className='card'+(eq?' eq':owned?' own':SAVE.savings<it.price?' poor':'')+(tr?' try':'');b.dataset.id=id;
+    b.innerHTML='<canvas></canvas><div class="n">'+it.name+'</div><div class="p">'+(eq?(tab==='outfit'?'穿着中':id==='none'?'当前':'戴着中'):owned?(id==='none'?'点我摘帽':'已拥有'):'¥'+it.price)+'</div>';
+    b.onclick=()=>tapItem(tab,id);g.appendChild(b);
+    const look=tab==='outfit'?{outfit:id,hat:pv.hat}:{outfit:pv.outfit,hat:id};requestAnimationFrame(()=>drawLookOn(b.querySelector('canvas'),look,tab==='hat'?'hat':'outfit'));}
+  $('wMoney').textContent='¥'+SAVE.savings;const L2=lookPreview();$('wName').textContent=OUTFITS[L2.outfit].name+' · '+(L2.hat==='none'?'不戴帽子':HATS[L2.hat].name);}
+function equip(tab,id){SAVE[tab]=id;persist();if(tab==='outfit')W8.tryOutfit=null;else W8.tryHat=null;}
+function tapItem(tab,id){const DB=tab==='outfit'?OUTFITS:HATS;
+  if(id==='none'){if(SAVE.hat==='none'){wMsg('现在就没戴帽子哦～','#a0704a');}else{equip('hat','none');sfx('tool');wMsg('摘下帽子啦～','#2fa84a');}W8.tryHat=null;buildGrid();return;}
+  const it=DB[id],owned=SAVE.owned[tab].includes(id);
+  if(owned){if(SAVE[tab]===id){if(tab==='hat'){equip('hat','none');sfx('tool');wMsg('摘下「'+it.name+'」啦～','#2fa84a');}else wMsg('正穿着「'+it.name+'」呢～','#a0704a');}
+    else{equip(tab,id);sfx('pick');wMsg((tab==='outfit'?'换上':'戴上')+'「'+it.name+'」啦～','#2fa84a');wardSpark(10);}buildGrid();return;}
+  if(tab==='outfit')W8.tryOutfit=id;else W8.tryHat=id;buildGrid();
+  if(SAVE.savings<it.price){sfx('warn');wMsg('存款不够哦～「'+it.name+'」要 ¥'+it.price+'，还差 ¥'+(it.price-SAVE.savings)+'，再营业几局吧！','#e8452c');return;}
+  askConfirm('花 <b>¥'+it.price+'</b> 买下「'+it.name+'」吗？<br><small>存款 ¥'+SAVE.savings+' → ¥'+(SAVE.savings-it.price)+'</small>','买下！','再想想',ok=>{
+    if(!ok){if(tab==='outfit')W8.tryOutfit=null;else W8.tryHat=null;wMsg('先不买啦～','#a0704a');buildGrid();return;}
+    if(SAVE.savings<it.price||SAVE.owned[tab].includes(id)){buildGrid();return;}
+    SAVE.savings-=it.price;SAVE.owned[tab].push(id);equip(tab,id);sfx('coin');setTimeout(()=>sfx('happy'),120);wardSpark(28);bossAct('happy',1.2);
+    wMsg('买到啦！已'+(tab==='outfit'?'换上':'戴上')+'「'+it.name+'」','#2fa84a');buildGrid();});}
+function wardSpark(n){for(let i=0;i<n;i++){const a=rand(0,6.28),v=rand(0.15,0.55);W8.spark.push({x:0.5,y:0.5,vx:Math.cos(a)*v,vy:Math.sin(a)*v-0.25,life:rand(.6,1.1),max:1.1,col:['#ffd23f','#fff3a0','#ff8fb1','#ffffff'][i%4],r:rand(3,6)});}}
+function drawWardPreview(rdt){if(!$('wardrobe').classList.contains('show'))return;const cv=$('wPrev'),r=cv.getBoundingClientRect();if(!r.width||!r.height)return;const d=window.devicePixelRatio||1,w=Math.round(r.width*d),h=Math.round(r.height*d);
+  if(cv.width!==w||cv.height!==h){cv.width=w;cv.height=h;}const c2=cv.getContext('2d'),save=ctx;ctx=c2;ctx.setTransform(1,0,0,1,0,0);ctx.clearRect(0,0,w,h);
+  const s=Math.min(h/262,w/170);try{drawBoss(w/2,h+2*s,s,lookPreview());
+  for(let i=W8.spark.length-1;i>=0;i--){const p=W8.spark[i];p.life-=rdt;p.x+=p.vx*rdt;p.y+=p.vy*rdt;p.vy+=0.5*rdt;if(p.life<=0){W8.spark.splice(i,1);continue;}ctx.globalAlpha=clamp(p.life/p.max*1.4,0,1);star5(p.x*w,p.y*h,p.r*d,p.col);}ctx.globalAlpha=1;}finally{ctx=save;}}
+
 // ================= 测试接口 =================
 window.__bbq={boss,bossAct,bossSay,get state(){return state},get time(){return time},get coins(){return coins},get stats(){return {coins,served,lost,burntCount,sold,rejected}},
   set speed(v){speed=v},get speed(){return speed},get slots(){return slots},get spots(){return spots},get tool(){return tool},get selected(){return selected},get port(){return L.port},
   layout:()=>L,slotRect,spotRect,start:startGame,setTime:v=>{time=v;},
   client(r){const b=cvs.getBoundingClientRect();return {x:b.left+(r.x+r.w/2)/W*b.width,y:b.top+(r.y+r.h/2)/H*b.height};},
   rects(){return {trays:L.trays,tools:L.tools,slots:L.slots.map((_,i)=>slotRect(i)),spots:L.spots.map((_,i)=>spotRect(i))};},doneness,
-  hook:HOOK,fx,get flyers(){return flyers},get bossRound(){return bossRound},get bossResult(){return bossResult},set coins(v){coins=v},applyTool,rollSkill,skillA,skillB,newSkewer,setTool:v=>{tool=v;}};
+  hook:HOOK,fx,get flyers(){return flyers},get bossRound(){return bossRound},get bossResult(){return bossResult},set coins(v){coins=v},applyTool,rollSkill,skillA,skillB,newSkewer,setTool:v=>{tool=v;},get save(){return SAVE},OUTFITS,HATS,drawLookOn,openWardrobe,closeWardrobe,tapItem,persist,loadSave,
+  renderLook(cv,look,act,frac,scale,base){const c2=cv.getContext('2d'),sv=ctx;ctx=c2;try{if(act){boss.act=act;boss.actDur=1;boss.actT=frac==null?0.5:frac;}else{boss.act='idle';}drawBoss(cv.width/2,base||cv.height-4,scale||cv.height/262,look,false);}finally{ctx=sv;}}};
+refreshSaveBar();
 window.__game=HOOK;
 requestAnimationFrame(frame);
 </script>
