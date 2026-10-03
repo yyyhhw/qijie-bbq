@@ -7,7 +7,7 @@
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="format-detection" content="telephone=no">
 <meta name="theme-color" content="#3b2230">
-<title>7姐烧烤</title>
+<title>77的宝藏烧烤摊</title>
 <link rel="icon" href="data:,">
 <style>
 html,body{margin:0;height:100%;background:#3b2230;overflow:hidden;position:fixed;inset:0;width:100%;
@@ -37,6 +37,8 @@ html,body{margin:0;height:100%;background:#3b2230;overflow:hidden;position:fixed
 .sticky{position:sticky;bottom:-22px;padding:10px 0 4px;background:linear-gradient(rgba(255,250,242,0),#fffaf2 30%)}
 .hero{display:flex;align-items:center;justify-content:center;gap:14px;margin-bottom:4px}
 #mascot{width:150px;height:168px;flex:none}
+.title,.sub{white-space:nowrap}
+@media (max-width:560px){#mascot{width:112px;height:125px}.hero{gap:8px}.title{font-size:28px;letter-spacing:1px}.sub{font-size:13px;letter-spacing:1px}.greet{font-size:13px;padding:5px 10px}}
 .greet{position:relative;display:inline-block;background:#fff;border:3px solid #ff8a6a;border-radius:16px;padding:6px 14px;font-weight:800;color:#e8452c;font-size:clamp(13px,2.6vmin,17px);line-height:1.5}
 .greet:before{content:"";position:absolute;left:-12px;top:50%;margin-top:-8px;border:8px solid transparent;border-right:10px solid #ff8a6a;border-left:0}
 @media (max-height:520px){#mascot{width:92px;height:103px}.hero{gap:10px;margin-bottom:0}.greet{font-size:12px;padding:3px 10px}.panel{padding:10px 22px 14px}.title{font-size:34px;letter-spacing:2px}.sub{margin:0 0 6px;font-size:13px}
@@ -48,14 +50,14 @@ html,body{margin:0;height:100%;background:#3b2230;overflow:hidden;position:fixed
 <body>
 <canvas id="c"></canvas>
 <div id="start" class="ov show"><div class="panel">
-  <div class="hero"><canvas id="mascot"></canvas><div><div class="title">7姐<span>烧烤</span></div>
-  <div class="sub">— 夜市人气烤串摊 —</div><div class="greet">欢迎光临～我是老板娘<b>7姐</b>！<br>今天也要烤得香香的哦！</div></div></div>
+  <div class="hero"><canvas id="mascot"></canvas><div><div class="title">77的<span>宝藏烧烤摊</span></div>
+  <div class="sub">— 夜市人气烤串摊 —</div><div class="greet">欢迎来到<b>77的宝藏烧烤摊</b>～<br>我是老板娘7姐，烤得香香的哦！</div></div></div>
   <ol class="how">
     <li>点左边的<b>生串托盘</b>，把串放上烤架（最多 6 串）。</li>
     <li>每串都要按顺序调味：<b>撒盐 → 撒辣椒 → 翻面 → 撒盐 → 撒辣椒</b>。<br>先点右边的<b>工具</b>，再点烤串（工具会保持选中，可以连着点好几串）。</li>
     <li>看串下面的火候条：<b>生 → 刚好（绿色）→ 糊</b>。调味完成又「刚好」时，把串<b>拖给顾客</b>，或者<b>点串再点顾客</b>。</li>
     <li>烤<b>糊</b>的串要扔进<b>垃圾桶</b>，才能空出位置。</li>
-    <li>顾客耐心用完会生气离开！营业 <b>60 秒</b>，赚越多金币越好。</li>
+    <li>顾客耐心用完会生气离开！营业 <b>90 秒</b>，赚越多金币越好。</li>
   </ol>
   <div class="prices"><span class="chip">土豆 ¥3（熟得快）</span><span class="chip">牛肉 ¥6</span><span class="chip">牛肠 ¥5（熟得慢）</span><br>上菜快还有小费哦～</div>
   <div class="sticky"><button class="btn" id="startBtn">开始营业</button></div>
@@ -72,15 +74,15 @@ html,body{margin:0;height:100%;background:#3b2230;overflow:hidden;position:fixed
 "use strict";
 // ================= 常量 =================
 const FONT='"PingFang SC","Microsoft YaHei","Noto Sans CJK SC","Noto Sans SC","Source Han Sans SC","WenQuanYi Micro Hei","Noto Serif CJK SC",sans-serif';
-const ROUND=60,MAX_SLOTS=6,MAX_CUST=4;
+const ROUND=90,MAX_SLOTS=6,MAX_CUST=4;
 const TYPES={
-  potato:{name:'土豆',price:3,p0:6,p1:12,raw:'#f7e6a6',cook:'#e9a63a',burn:'#3a2a1c'},
-  beef:{name:'牛肉',price:6,p0:8,p1:14.5,raw:'#c9424c',cook:'#8f4a26',burn:'#2a1810'},
-  gut:{name:'牛肠',price:5,p0:10,p1:17,raw:'#f3c3b6',cook:'#d98744',burn:'#33221a'}};
+  potato:{name:'土豆',price:3,p0:6,p1:20,raw:'#f7e6a6',cook:'#e9a63a',burn:'#3a2a1c'},
+  beef:{name:'牛肉',price:6,p0:8,p1:23,raw:'#c9424c',cook:'#8f4a26',burn:'#2a1810'},
+  gut:{name:'牛肠',price:5,p0:10,p1:26,raw:'#f3c3b6',cook:'#d98744',burn:'#33221a'}};
 const TYPE_KEYS=['potato','beef','gut'];
 const STEPS=['salt','chili','flip','salt','chili'],STEP_NAME={salt:'撒盐',chili:'撒辣椒',flip:'翻面'},STEP_SHORT={salt:'盐',chili:'辣',flip:'翻'};
 const STEP_COL={salt:'#ffffff',chili:'#ff4b3a',flip:'#ffb300'};
-const STAR=[30,60,100];
+const STAR=[20,40,80];
 const rand=(a,b)=>a+Math.random()*(b-a),clamp=(v,a,b)=>v<a?a:v>b?b:v,lerp=(a,b,t)=>a+(b-a)*t;
 function mix(c1,c2,t){const a=parseInt(c1.slice(1),16),b=parseInt(c2.slice(1),16);t=clamp(t,0,1);
   const r=Math.round(lerp(a>>16,b>>16,t)),g=Math.round(lerp(a>>8&255,b>>8&255,t)),bl=Math.round(lerp(a&255,b&255,t));return 'rgb('+r+','+g+','+bl+')';}
@@ -160,7 +162,7 @@ function addFloat(text,x,y,color,size){floats.push({text,x,y,color:color||'#ffd2
 function spawnCustomer(){const free=[];spots.forEach((s,i)=>{if(!s)free.push(i);});if(!free.length)return;
   const idx=free[Math.floor(Math.random()*free.length)];const prog=elapsed/ROUND;
   const r=Math.random(),n=r<0.38?1:r<0.8?2:3;const counts={};for(let i=0;i<n;i++){const k=TYPE_KEYS[Math.floor(Math.random()*3)];counts[k]=(counts[k]||0)+1;}
-  const order=Object.keys(counts).map(k=>({type:k,need:counts[k],got:0}));const maxP=(26+7*n)*(1-0.15*prog);
+  const order=Object.keys(counts).map(k=>({type:k,need:counts[k],got:0}));const maxP=(40+10*n)*(1-0.1*prog);
   spots[idx]={id:++custId,kind:KINDS[Math.floor(Math.random()*KINDS.length)],order,patience:maxP,maxP,phase:'enter',anim:0,bob:rand(0,6),mood:0,react:0,reactText:'',col:['#ff9aa2','#a0d8ef','#b5e48c','#ffd166','#cdb4db','#f4a261'][Math.floor(Math.random()*6)]};
   sfx('arrive');}
 function custNeeds(c,type){return c&&c.phase==='wait'&&c.order.some(o=>o.type===type&&o.got<o.need);}
@@ -218,13 +220,13 @@ function update(dt){bossUpdate(dt);
   if(sizzleGain)sizzleGain.gain.setTargetAtTime(muted?0:Math.min(0.09,cooking*0.016),actx.currentTime,0.2);
   spots.forEach((c,i)=>{if(!c)return;c.bob+=dt;c.react=Math.max(0,c.react-dt);
     if(c.phase==='enter'){c.anim+=dt*1.6;if(c.anim>=1){c.anim=1;c.phase='wait';}}
-    else if(c.phase==='wait'){if(state==='play'){c.patience-=dt;if(c.patience<=0){c.phase='leaveAngry';c.anim=0;c.mood=-1;lost++;bossAct('worry',1.4);bossSay('客人别走～');coins=Math.max(0,coins-5);sfx('sad');
-      const sp=L.spots[i];addFloat('生气走了 -¥5',sp.cx,sp.base-160*sp.sc,'#ff6b5a',26);}}}
+    else if(c.phase==='wait'){if(state==='play'){c.patience-=dt;if(c.patience<=0){c.phase='leaveAngry';c.anim=0;c.mood=-1;lost++;bossAct('worry',1.4);bossSay('客人别走～');coins=Math.max(0,coins-3);sfx('sad');
+      const sp=L.spots[i];addFloat('生气走了 -¥3',sp.cx,sp.base-160*sp.sc,'#ff6b5a',26);}}}
     else{c.anim+=dt*1.3;if(c.anim>=1)spots[i]=null;}});
   if(state!=='play')return;
   elapsed+=dt;time-=dt;
   const sec=Math.ceil(time);if(sec<=10&&sec!==lastTick&&sec>0){lastTick=sec;sfx('tick');}
-  nextCust-=dt;if(nextCust<=0){spawnCustomer();const prog=elapsed/ROUND;nextCust=rand(3.6,6.4)*(1-0.3*prog);}
+  nextCust-=dt;if(nextCust<=0){spawnCustomer();const prog=elapsed/ROUND;nextCust=rand(3.6,6.4)*(1-0.2*prog);}
   if(time<=0){time=0;endGame();}}
 function endGame(){state='over';selected=-1;drag=null;tool=null;sfx('end');
   const st=coins>=STAR[2]?3:coins>=STAR[1]?2:coins>=STAR[0]?1:0;
@@ -293,8 +295,8 @@ function drawHUD(){const h=L.hud.h;ctx.fillStyle='rgba(40,20,30,.55)';ctx.fillRe
   const sc=L.port?1.15:1;
   // 7姐头像 + 招牌
   const ss=L.port?1:1,ax=36,ay=h/2+2;draw7Jie(ax,ay,0.62*(L.port?1.1:1));
-  ctx.save();ctx.translate(ax+36,h/2);rr(0,-22*ss,140*ss,44*ss,12);ctx.fillStyle='#e8452c';ctx.fill();ctx.strokeStyle='#ffd166';ctx.lineWidth=3;ctx.stroke();
-  text('7姐烧烤',70*ss,1,25*ss,'#fff3c4','900');ctx.restore();
+  ctx.save();ctx.translate(ax+36,h/2);rr(0,-22*ss,196*ss,44*ss,12);ctx.fillStyle='#e8452c';ctx.fill();ctx.strokeStyle='#ffd166';ctx.lineWidth=3;ctx.stroke();
+  text('77的宝藏烧烤摊',98*ss,1,22*ss,'#fff3c4','900');ctx.restore();
   // 时间
   const tx=L.port?W/2+10:W/2,warn=time<=10&&state==='play';ctx.fillStyle=warn?(Math.sin(now*10)>0?'#ff4b3a':'#b0281a'):'rgba(255,255,255,.15)';rr(tx-80*sc,8,160*sc,h-16,(h-16)/2);ctx.fill();
   ctx.strokeStyle='#fff';ctx.lineWidth=3;ell(tx-46*sc,h/2,13*sc,13*sc);ctx.stroke();ctx.beginPath();ctx.moveTo(tx-46*sc,h/2);ctx.lineTo(tx-46*sc,h/2-8*sc);ctx.moveTo(tx-46*sc,h/2);ctx.lineTo(tx-40*sc,h/2+2);ctx.stroke();
