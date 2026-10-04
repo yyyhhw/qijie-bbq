@@ -2,8 +2,8 @@
 // ================= 老板娘 77：状态、动作、绘制 =================
 // 坐标系：原点 = 腰部（柜台高度），向上为负。头部中心约 (0,-150)，头顶约 -214。
 const Q={act:'idle',actT:0,actDur:0,say:'',sayT:0,sayDur:0,blink:2.5,t:0,idleEv:6,item:null,look:0,lookT:0,lookTo:0,emote:null,emoteT:0};
-const Q_HAPPY=['来咯～','趁热吃噻！','巴适得板！','安逸惨咯～','慢慢吃哈～','下回再来耍嘛！','要得要得～','香得很哦！','吃好喝好哈～'];
-const Q_IDLE=['摆哈龙门阵嘛～','今天好热闹哦！','火候刚刚好～','么儿些，来吃串串！','大哥大姐来尝一下嘛～','香得遭不住咯～'];
+const Q_HAPPY=['来咯～','趁热吃噻！','巴适得板！','安逸惨咯～','慢慢吃哈～','下回再来耍嘛！','要得要得～','香得很哦！','吃好喝好哈～','安逸噻！下回再来嘛～','要得，慢走哈！'];
+const Q_IDLE=['摆哈龙门阵嘛～','今天好热闹哦！','火候刚刚好～','么儿些，来吃串串！','大哥大姐来尝一下嘛～','香得遭不住咯～','噢哟，火好旺哦！','来嘛来嘛，巴适得很！','吃了还想吃哦～','莫客气，随便耍！','哦哟，香惨咯！'];
 function q7Act(a,dur,item){Q.act=a;Q.actT=0;Q.actDur=dur||0.6;Q.item=item||null;}
 function q7Say(t,dur){Q.say=t;Q.sayT=dur||1.8;Q.sayDur=Q.sayT;}
 function q7Emote(e,dur){Q.emote=e;Q.emoteT=dur||1.2;}

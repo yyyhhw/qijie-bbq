@@ -81,7 +81,7 @@ function resetGame(){DF=diff();time=ROUND;coins=0;shownCoins=0;served=0;lost=0;b
   slots.fill(null);spots.fill(null);particles=[];floats=[];toast=null;drag=null;flyers=[];coinFlys=[];ultT=0;bossRound=false;bossResult='none';bossSpawnT=0;bossEndT=0;warnSaid=0;
   Object.assign(fx,{flash:0,ring:0,slow:0,shake:0,callout:null,banner:null,sweep:null,trauma:0});}
 function startGame(){audioUnlock();unlockSpeech();resetGame();state='play';paused=false;showOv(null);
-  showToast('第'+SAVE.day+'天开张！点生串托盘上架～','#fff');sfx('happy');q7Act('wave',1.2);q7Say(SAVE.day===1?'开张咯！大哥大姐来尝一下嘛～':'第'+SAVE.day+'天，开张咯！',2.4);musicSync();}
+  showToast('第'+SAVE.day+'天开张！点生串托盘上架～','#fff');sfx('happy');q7Act('wave',1.2);q7Say(SAVE.day===1?'开张咯！大哥大姐来尝一下嘛～':'第'+SAVE.day+'天，开张咯！来耍嘛～',2.4);musicSync();}
 function showToast(text,color,warn){toast={text,color:color||'#fff',t:0,dur:1.9,warn:!!warn};}
 function addFloat(text,x,y,color,size,dur){floats.push({text,x,y,color:color||'#ffd23f',size:size||30,t:0,dur:dur||1.2});}
 function earn(n,x,y,label,col){if(n<=0)return;coins+=n;addFloat(label||('+¥'+n),x,y,col||'#ffd23f',label?26:32);const k=Math.min(8,2+n);for(let i=0;i<k;i++)coinFlys.push({x:x+rand(-14,14),y:y+rand(-10,10),vx:rand(-160,160),vy:rand(-260,-120),t:-i*0.04,dur:0.75+rand(0,0.15),val:i===k-1?n:0});}
@@ -137,7 +137,7 @@ function deliver(f){const c=spots[f.ci];if(!c||c.id!==f.cid)return;const T=TYPES
   earn(T.price+(f.perfect?1:0),hx+rand(-16,16),hy,f.perfect?'+¥'+(T.price+1)+' 完美！':null,f.perfect?'#7cff7a':null);if(f.perfect)perfectCount++;
   sfx('ding');sparkBurst(hx,sp.base-100*sp.sc,10,['#ffd23f','#fff3a0']);
   if(c.pending===0&&c.order.every(o=>o.got>=o.need))completeCustomer(c,f.ci);
-  else{c.react=0.9;c.reactText=c.isBoss?'还要还要！':f.perfect?'好香！':'有点焦，也好吃';c.reactGood=true;if(ultT<=0){q7Act('happy',0.7);q7Say(c.isBoss?'马上就来！':'来咯～',1.1);}}}
+  else{c.react=0.9;c.reactText=c.isBoss?'还要还要！':f.perfect?'好香！':'有点焦，也好吃';c.reactGood=true;if(ultT<=0){q7Act('happy',0.7);q7Say(c.isBoss?'马上就来，莫急嘛！':'来咯～',1.1);}}}
 function completeCustomer(c,ci){const sp=custPos(ci);if(c.isBoss){bossWin(c);return;}
   combo=comboT>0?combo+1:1;comboT=9;bestCombo=Math.max(bestCombo,combo);
   const tip=Math.ceil(3*c.patience/c.maxP)+(combo>=2?Math.min(5,combo-1):0);served++;c.phase='leaveHappy';c.anim=0;c.mood=1;
