@@ -90,7 +90,7 @@ function sparkles(n){const box=document.querySelector('.wd-left');for(let i=0;i<
   s.style.setProperty('--dx',(Math.random()*240-120)+'px');s.style.setProperty('--dy',(Math.random()*240-150)+'px');s.style.animationDelay=(Math.random()*0.25)+'s';box.appendChild(s);setTimeout(()=>s.remove(),1300);}}
 const wdPrev=$('wdPrev'),wctx=wdPrev.getContext('2d');
 function drawWdPrev(){const old=ctx;ctx=wctx;ctx.setTransform(1,0,0,1,0,0);ctx.clearRect(0,0,wdPrev.width,wdPrev.height);ctx.fillStyle='rgba(255,255,255,.45)';ell(210,500,150,18);ctx.fill();
-  drawQ7(210,470,1.85,wd.look);drawQ7Say(30,52,360);ctx=old;}
+  drawQ7(210,470,1.85,wd.look);ctx.save();ctx.translate(24,46);ctx.scale(1.6,1.6);drawQ7Say(0,0,230);ctx.restore();ctx=old;}
 // ---------- 主循环 ----------
 let lastT=performance.now(),fpsAcc=0,fpsN=0,fps=60;
 function step(dt){now+=dt;fxUpdate(dt);if(state==='play'&&paused){q7Update(0);return;}const gdt=fx.slow>0?dt*0.45:dt;update(gdt);}
