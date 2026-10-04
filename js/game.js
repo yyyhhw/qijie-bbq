@@ -48,7 +48,7 @@ function buildLayout(){readSafe();const aw=Math.max(200,innerWidth-safe.l-safe.r
       tools:['salt','flip','chili','bin'].map((id,i)=>({id,x:W-248,y:py+i*90,w:234,h:82})),
       prepY:py-14,toastY:338,bossSpot:{cx:(300+W)/2+40,base:306,sc:0.9}};}
   else{H=1480;W=Math.round(clamp(1480*asp,680,860));const ox=(W-720)/2,gy=700;
-    L={port:true,ox,hud:{h:96},counterY:440,counterH:52,q7:{x:ox+156,base:722,s:1.05,sayX:ox+262,sayY:560,sayW:420},
+    L={port:true,ox,hud:{h:96},counterY:440,counterH:52,q7:{x:ox+150,base:742,s:1.28,sayX:ox+270,sayY:540,sayW:420},
       spots:[0,1,2,3].map(i=>({cx:ox+92+i*179,base:440,sc:0.8,w:176})),
       trays:[0,1,2].map(i=>({x:ox+10+i*236,y:1094,w:228,h:150})),grill:{x:ox+10,y:gy,w:700,h:380},
       tools:['salt','flip','chili','bin'].map((id,i)=>({id,x:ox+10+i*177.5,y:1256,w:170,h:140})),
