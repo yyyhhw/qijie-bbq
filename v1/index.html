@@ -944,11 +944,11 @@ function sanitizeSave(d){const s=defSave();if(!d||typeof d!=='object'||Array.isA
   for(const k of['outfit','hat']){const valid=k==='outfit'?OUTFITS:HATS,list=d.owned&&Array.isArray(d.owned[k])?d.owned[k]:[];for(const id of list)if(typeof id==='string'&&Object.prototype.hasOwnProperty.call(valid,id)&&!s.owned[k].includes(id))s.owned[k].push(id);}
   if(typeof d.outfit==='string'&&s.owned.outfit.includes(d.outfit))s.outfit=d.outfit;
   if(d.hat==='none'||(typeof d.hat==='string'&&s.owned.hat.includes(d.hat)))s.hat=d.hat;return s;}
-function loadSave(){let raw=null;try{raw=window.localStorage.getItem(SAVE_KEY);}catch(e){storageOK=false;saveNote='（浏览器不能保存进度，关掉页面后存款会消失）';return defSave();}
+function loadSave(){let raw=null;try{raw=window.localStorage.getItem(SAVE_KEY+'-oldver')||window.localStorage.getItem(SAVE_KEY);}catch(e){storageOK=false;saveNote='（浏览器不能保存进度，关掉页面后存款会消失）';return defSave();}
   if(raw==null)return defSave();let d=null;try{d=JSON.parse(raw);}catch(e){d=null;}
   if(!d||typeof d!=='object'){saveNote='存档损坏，已重新开始～';try{localStorage.setItem(SAVE_KEY+'-bad',String(raw).slice(0,5000));}catch(e){}}
   return sanitizeSave(d);}
-function persist(){try{window.localStorage.setItem(SAVE_KEY,JSON.stringify(SAVE));storageOK=true;}catch(e){storageOK=false;saveNote='（浏览器不能保存进度，关掉页面后存款会消失）';}}
+function persist(){try{window.localStorage.setItem(SAVE_KEY+'-oldver',JSON.stringify(SAVE));/* 旧版只写自己的存档，不覆盖新版 */storageOK=true;}catch(e){storageOK=false;saveNote='（浏览器不能保存进度，关掉页面后存款会消失）';}}
 let SAVE=loadSave();
 function curLook(){return {outfit:SAVE.outfit,hat:SAVE.hat};}
 function refreshSaveBar(){const el=$('saveBar');if(el)el.innerHTML='<span>存款 <b>¥'+SAVE.savings+'</b></span><span>最高 <b>¥'+SAVE.best+'</b></span><span>营业 <b>'+SAVE.rounds+'</b> 局</span>'+(SAVE.bossWins?'<span>击败Boss <b>'+SAVE.bossWins+'</b> 次</span>':'')+(saveNote?'<em>'+saveNote+'</em>':'');}
