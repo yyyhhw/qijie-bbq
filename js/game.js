@@ -47,12 +47,12 @@ function buildLayout(){readSafe();const aw=Math.max(200,innerWidth-safe.l-safe.r
       trays:[0,1,2].map(i=>({x:14,y:py+i*120,w:234,h:112})),grill:{x:gx,y:py,w:gw,h:H-py-10},
       tools:['salt','flip','chili','bin'].map((id,i)=>({id,x:W-248,y:py+i*90,w:234,h:82})),
       prepY:py-14,toastY:338,bossSpot:{cx:(300+W)/2+40,base:306,sc:0.9}};}
-  else{H=1480;W=Math.round(clamp(1480*asp,680,860));const ox=(W-720)/2,gy=700;
-    L={port:true,ox,hud:{h:96},counterY:440,counterH:52,q7:{x:ox+150,base:742,s:1.28,sayX:ox+270,sayY:540,sayW:420},
+  else{W=Math.round(clamp(1480*asp,720,860));H=Math.round(clamp(W/asp,1480,1640));const ox=(W-720)/2,ex=H-1480,gy=700+ex;
+    L={port:true,ox,hud:{h:96},counterY:440,counterH:52,q7:{x:ox+150,base:742+ex*0.75,s:1.28+ex*0.0015,sayX:ox+270,sayY:540+ex*0.5,sayW:420},
       spots:[0,1,2,3].map(i=>({cx:ox+92+i*179,base:440,sc:0.8,w:176})),
-      trays:[0,1,2].map(i=>({x:ox+10+i*236,y:1094,w:228,h:150})),grill:{x:ox+10,y:gy,w:700,h:380},
-      tools:['salt','flip','chili','bin'].map((id,i)=>({id,x:ox+10+i*177.5,y:1256,w:170,h:140})),
-      prepY:684,toastY:1436,bossSpot:{cx:ox+380,base:440,sc:0.98}};}
+      trays:[0,1,2].map(i=>({x:ox+10+i*236,y:1094+ex,w:228,h:150})),grill:{x:ox+10,y:gy,w:700,h:380},
+      tools:['salt','flip','chili','bin'].map((id,i)=>({id,x:ox+10+i*177.5,y:1256+ex,w:170,h:140})),
+      prepY:684+ex,toastY:1436+ex,bossSpot:{cx:ox+380,base:440,sc:0.98}};}
   const G=L.grill,iw=G.w-40,sw=iw/MAX_SLOTS;
   L.slots=[];for(let i=0;i<MAX_SLOTS;i++)L.slots.push({cx:G.x+20+sw*(i+0.5),w:sw,ringY:G.y+44,top:G.y+(L.port?104:96),len:L.port?200:180,labelY:G.y+G.h-(L.port?30:26)});
   if(!L.port){const h=L.hud.h;L.ui={avatar:{x:44,y:h/2,r:29},day:{x:84,y:h/2},time:{x:W/2-110,y:10,w:220,h:h-20},coin:{x:W-372,y:10,w:180,h:h-20},mute:{x:W-176,y:8,w:76,h:h-16},pause:{x:W-92,y:8,w:80,h:h-16}};}
