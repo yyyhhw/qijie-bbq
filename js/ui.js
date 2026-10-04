@@ -62,7 +62,7 @@ const wd={tab:'outfit',look:{outfit:'apron',hat:'bandana'},focus:{kind:'outfit',
 const isNew=(k,id)=>k==='outfit'?Object.prototype.hasOwnProperty.call(NEW_OUTFITS,id):Object.prototype.hasOwnProperty.call(NEW_HATS,id);
 const owns=(k,id)=>id==='none'||SAVE.owned[k].includes(id);
 const itemOf=(k,id)=>id==='none'?{name:'不戴帽子',price:0}:(k==='outfit'?OUTFITS:HATS)[id];
-function openWardrobe(){wd.look={outfit:SAVE.outfit,hat:SAVE.hat};wd.focus={kind:wd.tab,id:SAVE[wd.tab]};buildGrid();updateWd();openOv('wardrobe');}
+function openWardrobe(){Q.sayT=0;if(Q.act==='ult'||Q.act==='bigSprinkle')q7Act('idle',0.1);wd.look={outfit:SAVE.outfit,hat:SAVE.hat};wd.focus={kind:wd.tab,id:SAVE[wd.tab]};buildGrid();updateWd();openOv('wardrobe');}
 function closeWardrobe(){closeOv('wardrobe');if(dlgCb)dlgAnswer(false);if(state==='title')renderTitle();}
 document.querySelectorAll('.tab').forEach(b=>b.addEventListener('click',()=>{sfx('click');wd.tab=b.dataset.tab;document.querySelectorAll('.tab').forEach(x=>x.classList.toggle('on',x===b));wd.focus={kind:wd.tab,id:wd.look[wd.tab]};buildGrid();updateWd();}));
 function drawCard(cv,k,id){const old=ctx;ctx=cv.getContext('2d');ctx.setTransform(2,0,0,2,0,0);ctx.clearRect(0,0,120,150);const look=k==='outfit'?{outfit:id,hat:'none'}:{outfit:wd.look.outfit,hat:id};
@@ -90,7 +90,7 @@ function sparkles(n){const box=document.querySelector('.wd-left');for(let i=0;i<
   s.style.setProperty('--dx',(Math.random()*240-120)+'px');s.style.setProperty('--dy',(Math.random()*240-150)+'px');s.style.animationDelay=(Math.random()*0.25)+'s';box.appendChild(s);setTimeout(()=>s.remove(),1300);}}
 const wdPrev=$('wdPrev'),wctx=wdPrev.getContext('2d');
 function drawWdPrev(){const old=ctx;ctx=wctx;ctx.setTransform(1,0,0,1,0,0);ctx.clearRect(0,0,wdPrev.width,wdPrev.height);ctx.fillStyle='rgba(255,255,255,.45)';ell(210,500,150,18);ctx.fill();
-  drawQ7(210,470,1.85,wd.look);drawQ7Say(250,70,220);ctx=old;}
+  drawQ7(210,470,1.85,wd.look);drawQ7Say(30,52,360);ctx=old;}
 // ---------- 主循环 ----------
 let lastT=performance.now(),fpsAcc=0,fpsN=0,fps=60;
 function step(dt){now+=dt;fxUpdate(dt);if(state==='play'&&paused){q7Update(0);return;}const gdt=fx.slow>0?dt*0.45:dt;update(gdt);}
