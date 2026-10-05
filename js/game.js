@@ -45,12 +45,13 @@ const cvs=$('c');const mainCtx=cvs.getContext('2d');ctx=mainCtx;
 let W=1280,H=720,L=null,scale=1,DPR=1,safe={t:0,r:0,b:0,l:0};
 function readSafe(){const cs=getComputedStyle($('safeProbe'));safe={t:parseFloat(cs.paddingTop)||0,r:parseFloat(cs.paddingRight)||0,b:parseFloat(cs.paddingBottom)||0,l:parseFloat(cs.paddingLeft)||0};}
 function buildLayout(){readSafe();const aw=Math.max(200,innerWidth-safe.l-safe.r),ah=Math.max(200,innerHeight-safe.t-safe.b),asp=aw/ah,port=asp<1;
+  const two=typeof petW!=='undefined'&&petW.length>=2;
   if(!port){H=720;W=Math.round(clamp(720*asp,1180,1560));const gx=262,gw=W-262*2,sw=(gw-40)/6,py=356;
     L={port:false,hud:{h:72},counterY:306,counterH:42,q7:{x:146,base:330,s:1.1,sayX:226,sayY:118,sayW:250},
-      spots:[0,1,2,3].map(i=>{const x0=300,w=(W-24-x0)/4;return {cx:x0+w*(i+0.5),base:306,sc:0.8,w};}),
+      spots:[0,1,2,3].map(i=>{const x0=two?384:300,w=(W-24-x0)/4;return {cx:x0+w*(i+0.5),base:306,sc:0.8,w};}),
       trays:[0,1,2].map(i=>({x:14,y:py+i*120,w:234,h:112})),grill:{x:gx,y:py,w:gw,h:H-py-10},
       tools:['salt','flip','chili','bin'].map((id,i)=>({id,x:W-248,y:py+i*90,w:234,h:82})),
-      prepY:py-14,toastY:338,bossSpot:{cx:(300+W)/2+40,base:306,sc:0.9},petSpots:[{x:260,base:318,s:0.9},{x:42,base:318,s:0.8}]};}
+      prepY:py-14,toastY:338,bossSpot:{cx:(300+W)/2+40,base:306,sc:0.9},petSpots:[{x:258,base:318,s:0.88},{x:334,base:318,s:0.88}]};}
   else{W=Math.round(clamp(1480*asp,720,860));H=Math.round(clamp(W/asp,1480,1640));const ox=(W-720)/2,ex=H-1480,gy=700+ex;
     L={port:true,ox,hud:{h:96},counterY:440,counterH:52,q7:{x:ox+150,base:742+ex*0.75,s:1.28+ex*0.0015,sayX:ox+270,sayY:540+ex*0.5,sayW:420},
       spots:[0,1,2,3].map(i=>({cx:ox+92+i*179,base:440,sc:0.8,w:176})),

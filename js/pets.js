@@ -91,8 +91,8 @@ function drawWorker(id,P,t,work,sleep,blink){const OL='rgba(50,30,30,.5)',arm=wo
 // ---------- 运行时 ----------
 let petW=[];
 function rosterValid(){return (SAVE.roster||[]).filter((id,i,a)=>PETS[id]&&SAVE.owned.pet.includes(id)&&a.indexOf(id)===i).slice(0,PET_MAX);}
-function petsReset(){const old=petW;petW=rosterValid().map((id,k)=>({id,k,cd:1.2+k*0.45,hop:0,work:0,bub:'',bubT:0}));
-  slots.forEach(s=>{if(s&&s.pet!=null&&!petW[s.pet])s.pet=null;});}
+function petsReset(){const old=petW.length;petW=rosterValid().map((id,k)=>({id,k,cd:1.2+k*0.45,hop:0,work:0,bub:'',bubT:0}));
+  slots.forEach(s=>{if(s&&s.pet!=null&&!petW[s.pet])s.pet=null;});if((old>=2)!==(petW.length>=2)&&typeof L!=='undefined'&&L&&!L.port)buildLayout();}
 function petCap(){return petW.length>=2?2:3;}
 function petPos(k){return L.petSpots[k];}
 function petOwnedN(k){let n=0;for(const s of slots)if(s&&s.pet===k)n++;return n;}
