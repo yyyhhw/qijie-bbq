@@ -104,16 +104,16 @@ function petDemandType(){const need={potato:0,wing:0,gut:0},urg={potato:9,wing:9
 function petFreeSlot(){for(let i=MAX_SLOTS-1;i>=0;i--)if(!slots[i])return i;return -1;}
 function petBubble(p,txt){p.bub=txt;p.bubT=1.1;}
 function petAct(p){const P=PETS[p.id],pos=petPos(p.k);
-  for(let i=0;i<MAX_SLOTS;i++){const s=slots[i];if(s&&s.pet===p.k&&sellable(s)){const ci=bestNormalFor(s.type);if(ci>=0&&serve(i,ci)){petBubble(p,P.say[Math.floor(Math.random()*P.say.length)]);return true;}}}
+  for(let i=0;i<MAX_SLOTS;i++){const s=slots[i];if(s&&s.pet===p.k&&sellable(s)){const ci=bestNormalFor(s.type);if(ci>=0&&serve(i,ci)){metr.petServed++;petBubble(p,P.say[Math.floor(Math.random()*P.say.length)]);return true;}}}
   let n=0;for(let i=0;i<MAX_SLOTS;i++){const s=slots[i];if(s&&s.pet===p.k&&!s.burnt&&s.step<3&&s.fly>=1){doStep(i);n++;}}if(n)return true;
-  if(petOwnedN(p.k)<petCap()){const type=petDemandType();if(type){const i=petFreeSlot();if(i>=0&&placeSkewer(type,i,{x:pos.x-1,y:pos.base-60,w:2,h:2})){slots[i].pet=p.k;return true;}}}
+  if(petOwnedN(p.k)<petCap()){const type=petDemandType();if(type&&!(bossPending&&time<stagesOf(type).p0/DF.heat+2.5)){const i=petFreeSlot();if(i>=0&&placeSkewer(type,i,{x:pos.x-1,y:pos.base-60,w:2,h:2})){slots[i].pet=p.k;return true;}}}
   return false;}
 function petsUpdate(dt){if(!petW.length)return;for(const p of petW){p.hop=Math.max(0,p.hop-dt*3);p.work=Math.max(0,p.work-dt*1.5);p.bubT-=dt;}
   if(state!=='play')return;
   // 绝不烤糊：自己的串快到「快糊了」的后半段还没人要 → 先收起来（不算烤糊）
   slots.forEach((s,i)=>{if(!s||s.pet==null||s.burnt)return;const P=stagesOf(s.type);if(s.t>=P.p1+(P.p2-P.p1)*0.4){const ci=bossRound?-1:bestNormalFor(s.type);if(sellable(s)&&ci>=0)serve(i,ci);else{throwAway(i);}}});
   if(bossRound)return;// BOSS 期间宠物休息，BOSS 的单要玩家自己做
-  for(const p of petW){p.cd-=dt;if(p.cd>0)continue;p.cd=PET_INT*rand(0.9,1.15);if(petAct(p)){p.hop=1;p.work=1;}}}
+  for(const p of petW){p.cd-=dt;if(p.cd>0)continue;p.cd=(petW.length>=2?0.95:1.15)*rand(0.9,1.15);if(petAct(p)){p.hop=1;p.work=1;}}}
 function drawPets(){if(!petW.length)return;for(const p of petW){const pos=petPos(p.k);drawPet(p.id,pos.x,pos.base,pos.s,{t:now+p.k*1.7,work:p.work,hop:p.hop,sleep:bossRound&&state==='play'});
   if(p.bubT>0){ctx.save();ctx.globalAlpha=Math.min(1,p.bubT*3);ctx.font='900 17px '+FONT;const tw=ctx.measureText(p.bub).width+18,y=pos.base-112*pos.s-10;rr(pos.x-tw/2,y-14,tw,28,14);ctx.fillStyle='#fffaf3';ctx.fill();ctx.strokeStyle='#ffb36a';ctx.lineWidth=2;ctx.stroke();text(p.bub,pos.x,y+1,17,'#c8502a','900');ctx.restore();}}}
 function petBadge(s,x,y){const p=petW[s.pet];if(!p)return;const P=PETS[p.id];ctx.fillStyle=P.kind==='human'?P.col:P.col;ell(x,y,11,11);ctx.fill();ctx.strokeStyle=P.dark;ctx.lineWidth=2.5;ctx.stroke();

@@ -4,14 +4,14 @@ const TEST=/[?&]test=1/.test(location.search);
 const ROUND=90,MAX_SLOTS=6,MAX_CUST=4;
 // p0=烤熟需要的秒数；win=「刚好」窗口；warn=「快糊了」宽限（这段时间也能卖）；调好料且熟了的串会自动「保温」（升温变慢）
 const TYPES={
-  potato:{name:'土豆片',price:3,p0:7,win:24,warn:8,raw:'#f6e7b0',cook:'#efb048',over:'#b8742a',burn:'#3a2a1c'},
-  wing:{name:'烤鹅翅',price:7,p0:10,win:26,warn:8,raw:'#f7d9c4',cook:'#de8a2c',over:'#9a521c',burn:'#2e1c10'},
-  gut:{name:'牛肠',price:5,p0:12,win:28,warn:8,raw:'#f3c6b8',cook:'#d98744',over:'#9a4c22',burn:'#33221a'}};
+  potato:{name:'土豆片',price:4,p0:7,win:24,warn:8,raw:'#f6e7b0',cook:'#efb048',over:'#b8742a',burn:'#3a2a1c'},
+  wing:{name:'烤鹅翅',price:8,p0:10,win:26,warn:8,raw:'#f7d9c4',cook:'#de8a2c',over:'#9a521c',burn:'#2e1c10'},
+  gut:{name:'牛肠',price:6,p0:12,win:28,warn:8,raw:'#f3c6b8',cook:'#d98744',over:'#9a4c22',burn:'#33221a'}};
 const TYPE_KEYS=['potato','wing','gut'];
 const STEPS=['salt','flip','chili'],STEP_NAME={salt:'撒盐',flip:'翻面',chili:'撒辣椒'};
 const KEEPWARM=0.4;
 // ================= 存档（版本化 + 迁移 + 备份）=================
-const SAVE_KEY='qijie-bbq-save-v1',SAVE_VER=3;
+const SAVE_KEY='qijie-bbq-save-v1',SAVE_VER=4;
 function defSave(){return {v:SAVE_VER,savings:0,best:0,rounds:0,bossWins:0,day:1,owned:{outfit:['apron'],hat:['bandana'],hair:['classic'],pet:[]},roster:[],outfit:'apron',hat:'bandana',hair:'classic',muted:false,music:true,grant1000:false,burnt:0,served:0,helpSeen:false};}
 let storageOK=true,saveNote='';
 const MIGRATIONS={1:d=>{d.day=Math.max(1,(Number(d.rounds)||0)+1);d.muted=false;d.music=true;d.grant1000=false;return d;},
@@ -83,7 +83,7 @@ function doneness(s){if(s.burnt)return 'burnt';const P=stagesOf(s.type);return s
 const sellable=s=>s&&!s.burnt&&s.step>=3&&(doneness(s)==='perfect'||doneness(s)==='warn');
 function resetGame(){DF=diff();time=ROUND;coins=0;shownCoins=0;served=0;lost=0;burntCount=0;sold=0;rejected=0;perfectCount=0;selected=-1;nextCust=1.5;elapsed=0;lastTick=99;combo=0;comboT=0;bestCombo=0;
   slots.fill(null);spots.fill(null);particles=[];floats=[];toast=null;drag=null;flyers=[];coinFlys=[];ultT=0;bossRound=false;bossPending=false;window.__settle=null;bossResult='none';bossSpawnT=0;bossEndT=0;warnSaid=0;
-  Object.assign(fx,{flash:0,ring:0,slow:0,shake:0,callout:null,banner:null,sweep:null,trauma:0});petsReset();}
+  Object.assign(fx,{flash:0,ring:0,slow:0,shake:0,callout:null,banner:null,sweep:null,trauma:0});metr={arrived:0,wait:0,waitMax:0,petServed:0};petsReset();}
 function startGame(){audioUnlock();unlockSpeech();resetGame();state='play';paused=false;showOv(null);
   showToast('第'+SAVE.day+'天开张！点生串托盘上架～','#fff');sfx('happy');q7Act('wave',1.2);q7Say(SAVE.day===1?'开张咯！大哥大姐来尝一下嘛～':'第'+SAVE.day+'天，开张咯！来耍嘛～',2.4);musicSync();}
 function showToast(text,color,warn){toast={text,color:color||'#fff',t:0,dur:1.9,warn:!!warn};}
@@ -91,7 +91,8 @@ function addFloat(text,x,y,color,size,dur){floats.push({text,x,y,color:color||'#
 function earn(n,x,y,label,col){if(n<=0)return;coins+=n;addFloat(label||('+¥'+n),x,y,col||'#ffd23f',label?26:32);const k=Math.min(8,2+n);for(let i=0;i<k;i++)coinFlys.push({x:x+rand(-14,14),y:y+rand(-10,10),vx:rand(-160,160),vy:rand(-260,-120),t:-i*0.04,dur:0.75+rand(0,0.15),val:i===k-1?n:0});}
 function addTrauma(a){fx.trauma=Math.min(1,fx.trauma+a);}
 // ================= 顾客 =================
-function spawnCustomer(){const free=[];spots.forEach((s,i)=>{if(!s)free.push(i);});if(!free.length)return;
+let metr={arrived:0,wait:0,waitMax:0,petServed:0};
+function spawnCustomer(){const free=[];spots.forEach((s,i)=>{if(!s)free.push(i);});if(!free.length)return;metr.arrived++;
   const idx=free[Math.floor(Math.random()*free.length)],prog=elapsed/ROUND,big=DF.big;
   const r=Math.random(),p1=0.55-0.25*big-0.1*prog,p3=0.05+0.2*big+0.05*prog,n=r<p1?1:r<1-p3?2:3;
   const counts={};for(let i=0;i<n;i++){const k=TYPE_KEYS[Math.floor(Math.random()*3)];counts[k]=(counts[k]||0)+1;}
@@ -143,9 +144,9 @@ function deliver(f){const c=spots[f.ci];if(!c||c.id!==f.cid)return;const T=TYPES
   sfx('ding');sparkBurst(hx,sp.base-100*sp.sc,10,['#ffd23f','#fff3a0']);
   if(c.pending===0&&c.order.every(o=>o.got>=o.need))completeCustomer(c,f.ci);
   else{c.react=0.9;c.reactText=c.isBoss?'还要还要！':f.perfect?'好香！':'有点焦，也好吃';c.reactGood=true;if(ultT<=0){q7Act('happy',0.7);q7Say(c.isBoss?'马上就来，莫急嘛！':'来咯～',1.1);}}}
-function completeCustomer(c,ci){const sp=custPos(ci);if(c.isBoss){bossWin(c);return;}
+function completeCustomer(c,ci){const sp=custPos(ci);if(c.isBoss){bossWin(c);return;}const wt=c.maxP-c.patience;metr.wait+=wt;metr.waitMax=Math.max(metr.waitMax,wt);
   combo=comboT>0?combo+1:1;comboT=9;bestCombo=Math.max(bestCombo,combo);
-  const tip=Math.ceil(3*c.patience/c.maxP)+(combo>=2?Math.min(5,combo-1):0);served++;c.phase='leaveHappy';c.anim=0;c.mood=1;
+  const tip=Math.ceil(4*c.patience/c.maxP)+(combo>=2?Math.min(5,combo-1):0);served++;c.phase='leaveHappy';c.anim=0;c.mood=1;
   setTimeout(()=>sfx('happy'),150);if(ultT<=0){q7Act('happy',1.1);q7Say(Q_HAPPY[Math.floor(Math.random()*Q_HAPPY.length)]);}
   earn(tip,sp.cx,sp.base-205*sp.sc,'小费 +¥'+tip,'#7cff7a');
   if(combo>=2){fx.callout={text:'连击 ×'+combo+'！',t:0,dur:1.2,kind:'C'};sfx('combo',combo);addTrauma(0.12);}
@@ -255,9 +256,9 @@ function flyPos(f){const k=clamp(f.t/f.dur,0,1),e=k*k*(3-2*k),tg=flyTarget(f),cx
 function endGame(){state='over';overT=0;selected=-1;drag=null;sfx('end');
   const goal=starGoals(),st=coins>=goal[2]?3:coins>=goal[1]?2:coins>=goal[0]?1:0;const day=SAVE.day;
   SAVE.savings+=coins;SAVE.rounds++;SAVE.day++;const nb=coins>SAVE.best;if(nb)SAVE.best=coins;if(bossResult==='win')SAVE.bossWins++;SAVE.burnt+=burntCount;SAVE.served+=served;persist();
-  window.__bbqResult={day,coins,served,lost,burntCount,sold,stars:st,rejected,perfectCount,bestCombo,bossRound,bossResult};
+  window.__bbqResult={day,coins,served,lost,burntCount,sold,stars:st,rejected,perfectCount,bestCombo,bossRound,bossResult,arrived:metr.arrived,avgWait:Math.round(metr.wait/Math.max(1,served-(bossResult==='win'?1:0))*10)/10,maxWait:Math.round(metr.waitMax),petServed:metr.petServed};
   renderOver(day,st,goal,nb);sizzleLevel(0);setTimeout(()=>{if(state==='over')showOv('over');},700);musicSync();}
-function starGoals(){const d=DF.d;return [Math.round(25+15*d),Math.round(50+30*d),Math.round(90+50*d)];}
+function starGoals(){const d=DF.d;return [Math.round(35+20*d),Math.round(80+50*d),Math.round(150+90*d)];}
 
 // ================= 输入：点按 / 拖拽 / 键盘 =================
 function toLogical(e){const r=cvs.getBoundingClientRect();return {x:(e.clientX-r.left)/r.width*W,y:(e.clientY-r.top)/r.height*H};}
