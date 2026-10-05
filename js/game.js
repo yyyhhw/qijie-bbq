@@ -11,17 +11,19 @@ const TYPE_KEYS=['potato','wing','gut'];
 const STEPS=['salt','flip','chili'],STEP_NAME={salt:'撒盐',flip:'翻面',chili:'撒辣椒'};
 const KEEPWARM=0.4;
 // ================= 存档（版本化 + 迁移 + 备份）=================
-const SAVE_KEY='qijie-bbq-save-v1',SAVE_VER=2;
-function defSave(){return {v:SAVE_VER,savings:0,best:0,rounds:0,bossWins:0,day:1,owned:{outfit:['apron'],hat:['bandana']},outfit:'apron',hat:'bandana',muted:false,music:true,grant1000:false,burnt:0,served:0,helpSeen:false};}
+const SAVE_KEY='qijie-bbq-save-v1',SAVE_VER=3;
+function defSave(){return {v:SAVE_VER,savings:0,best:0,rounds:0,bossWins:0,day:1,owned:{outfit:['apron'],hat:['bandana'],hair:['classic']},outfit:'apron',hat:'bandana',hair:'classic',muted:false,music:true,grant1000:false,burnt:0,served:0,helpSeen:false};}
 let storageOK=true,saveNote='';
-const MIGRATIONS={1:d=>{d.day=Math.max(1,(Number(d.rounds)||0)+1);d.muted=false;d.music=true;d.grant1000=false;return d;}};
+const MIGRATIONS={1:d=>{d.day=Math.max(1,(Number(d.rounds)||0)+1);d.muted=false;d.music=true;d.grant1000=false;return d;},
+  2:d=>{if(!d.owned||typeof d.owned!=='object')d.owned={};d.owned.hair=['classic'];d.hair='classic';return d;}};
 function sanitizeSave(d){const s=defSave();if(!d||typeof d!=='object'||Array.isArray(d))return s;const num=v=>{v=Number(v);return Number.isFinite(v)&&v>=0?Math.min(1e9,Math.floor(v)):0;};
   let v=Number(d.v)||1;while(v<SAVE_VER&&MIGRATIONS[v]){d=MIGRATIONS[v](d);v++;}
   s.savings=num(d.savings);s.best=num(d.best);s.rounds=num(d.rounds);s.bossWins=num(d.bossWins);s.day=Math.max(1,num(d.day)||1);s.burnt=num(d.burnt);s.served=num(d.served);
   s.muted=!!d.muted;s.music=d.music!==false;s.grant1000=!!d.grant1000;s.helpSeen=!!d.helpSeen;
-  for(const k of['outfit','hat']){const valid=k==='outfit'?OUTFITS:HATS,list=d.owned&&Array.isArray(d.owned[k])?d.owned[k]:[];for(const id of list)if(typeof id==='string'&&Object.prototype.hasOwnProperty.call(valid,id)&&!s.owned[k].includes(id))s.owned[k].push(id);}
+  for(const k of['outfit','hat','hair']){const valid=k==='outfit'?OUTFITS:k==='hat'?HATS:HAIRS,list=d.owned&&Array.isArray(d.owned[k])?d.owned[k]:[];for(const id of list)if(typeof id==='string'&&Object.prototype.hasOwnProperty.call(valid,id)&&!s.owned[k].includes(id))s.owned[k].push(id);}
   if(typeof d.outfit==='string'&&s.owned.outfit.includes(d.outfit))s.outfit=d.outfit;
-  if(d.hat==='none'||(typeof d.hat==='string'&&s.owned.hat.includes(d.hat)))s.hat=d.hat;return s;}
+  if(d.hat==='none'||(typeof d.hat==='string'&&s.owned.hat.includes(d.hat)))s.hat=d.hat;
+  if(typeof d.hair==='string'&&s.owned.hair.includes(d.hair))s.hair=d.hair;s.v=SAVE_VER;return s;}
 function loadSave(){let raw=null;try{raw=window.localStorage.getItem(SAVE_KEY);}catch(e){storageOK=false;saveNote='浏览器不能保存进度，关掉页面后存款会消失';return defSave();}
   if(raw==null)return defSave();let d=null;try{d=JSON.parse(raw);}catch(e){d=null;}
   if(!d||typeof d!=='object'){let b=null;try{b=JSON.parse(localStorage.getItem(SAVE_KEY+'-bak'));}catch(e){b=null;}
@@ -32,7 +34,7 @@ function persist(){try{const old=localStorage.getItem(SAVE_KEY);if(old)localStor
 let SAVE=loadSave(),GRANTED=0;
 // 一次性：存款补到至少 ¥1000（新玩家直接 1000 开局；老存档只补一次，不动已买的衣服和纪录）
 if(!SAVE.grant1000){GRANTED=Math.max(0,1000-SAVE.savings);SAVE.savings=Math.max(SAVE.savings,1000);SAVE.grant1000=true;SAVE.v=SAVE_VER;persist();}
-function curLook(){return {outfit:SAVE.outfit,hat:SAVE.hat};}
+function curLook(){return {outfit:SAVE.outfit,hat:SAVE.hat,hair:SAVE.hair};}
 // ================= 难度：按「第几天」平缓上升 =================
 function diff(){const d=clamp((SAVE.day-1)/9,0,1);return {d,win:1-0.28*d,warn:1-0.25*d,heat:1+0.12*d,pat:1.3-0.32*d,spawn:1-0.3*d,big:d};}
 let DF=diff();
@@ -68,7 +70,7 @@ let rsT=0;addEventListener('resize',()=>{clearTimeout(rsT);rsT=setTimeout(resize
 let state='title',paused=false,time=ROUND,coins=0,shownCoins=0,served=0,lost=0,burntCount=0,sold=0,rejected=0,perfectCount=0,selected=-1,nextCust=1.5,elapsed=0,lastTick=99;
 let idleSay=12,combo=0,comboT=0,bestCombo=0,coinPop=0,overT=0;
 const fx={flash:0,ring:0,slow:0,shake:0,callout:null,banner:null,sweep:null,trauma:0};
-let flyers=[],coinFlys=[],ultT=0,bossRound=false,bossResult='none',bossSpawnT=0,bossEndT=0,bossType='potato',warnSaid=0;
+let bossPending=false,flyers=[],coinFlys=[],ultT=0,bossRound=false,bossResult='none',bossSpawnT=0,bossEndT=0,bossType='potato',warnSaid=0;
 let slots=new Array(MAX_SLOTS).fill(null),spots=new Array(MAX_CUST).fill(null),particles=[],floats=[],toast=null,drag=null,custId=0,now=0;
 const HOOK={forceSkillA:null,forceSkillB:null,forceBoss:null,stats:{rolls:0,a:0,b:0}};
 const KINDS=['cat','bear','rabbit','panda','boy','granny','girl'];
@@ -78,7 +80,7 @@ function stagesOf(type){const T=TYPES[type],p0=T.p0,p1=p0+T.win*DF.win,p2=p1+T.w
 function doneness(s){if(s.burnt)return 'burnt';const P=stagesOf(s.type);return s.t>=P.p2?'burnt':s.t>=P.p1?'warn':s.t>=P.p0?'perfect':s.t>=P.p0*0.5?'half':'raw';}
 const sellable=s=>s&&!s.burnt&&s.step>=3&&(doneness(s)==='perfect'||doneness(s)==='warn');
 function resetGame(){DF=diff();time=ROUND;coins=0;shownCoins=0;served=0;lost=0;burntCount=0;sold=0;rejected=0;perfectCount=0;selected=-1;nextCust=1.5;elapsed=0;lastTick=99;combo=0;comboT=0;bestCombo=0;
-  slots.fill(null);spots.fill(null);particles=[];floats=[];toast=null;drag=null;flyers=[];coinFlys=[];ultT=0;bossRound=false;bossResult='none';bossSpawnT=0;bossEndT=0;warnSaid=0;
+  slots.fill(null);spots.fill(null);particles=[];floats=[];toast=null;drag=null;flyers=[];coinFlys=[];ultT=0;bossRound=false;bossPending=false;window.__settle=null;bossResult='none';bossSpawnT=0;bossEndT=0;warnSaid=0;
   Object.assign(fx,{flash:0,ring:0,slow:0,shake:0,callout:null,banner:null,sweep:null,trauma:0});}
 function startGame(){audioUnlock();unlockSpeech();resetGame();state='play';paused=false;showOv(null);
   showToast('第'+SAVE.day+'天开张！点生串托盘上架～','#fff');sfx('happy');q7Act('wave',1.2);q7Say(SAVE.day===1?'开张咯！大哥大姐来尝一下嘛～':'第'+SAVE.day+'天，开张咯！来耍嘛～',2.4);musicSync();}
@@ -165,11 +167,20 @@ function skillB(){ultT=2.2;fx.slow=1.0;fx.flash=1;fx.ring=0.001;addTrauma(0.45);
   return {sent,kept};}
 function custPos(i){const c=spots[i];return c&&c.isBoss?L.bossSpot:L.spots[i];}
 // ================= BOSS 大胃王 =================
-const BOSS_NEED=5,BOSS_TIME=22;
+const BOSS_NEED=5,BOSS_TIME=22,BOSS_WARN=12;
 function bossThreshold(){return 70+Math.min(40,SAVE.day*5);}
-function startBossRound(){bossRound=true;bossResult='pending';time=BOSS_TIME;lastTick=99;bossType=TYPE_KEYS[Math.floor(Math.random()*3)];
+function warnBoss(){bossPending=true;fx.warnT=0;sfx('bossIn');addTrauma(0.2);q7Act('shock',0.9);q7Say('大人物要来啦！手上的串串快卖完嘛～',2.8);showToast('大人物要来啦！不来新客人了，赶紧卖完手上的串','#ffe066');musicSync();}
+// BOSS 到场前：烤架上剩的串自动结算（熟了且没糊 → 半价卖给路人；生的/糊的 → 清掉）
+function settleGrill(){let sold2=0,cash=0,cleared=0;drag=null;selected=-1;
+  slots.forEach((s,i)=>{if(!s)return;const S=L.slots[i],d=doneness(s),cooked=!s.burnt&&d!=='burnt'&&s.t>=stagesOf(s.type).p0;
+    if(cooked){const v=Math.max(1,Math.ceil(TYPES[s.type].price/2));cash+=v;sold2++;slots[i]=null;earn(v,S.cx,S.top+S.len*0.4,'半价 +¥'+v,'#ffe066');sparkBurst(S.cx,S.top+S.len*0.45,8,['#ffd23f','#fff3a0']);}
+    else{cleared++;slots[i]=null;puffAt(S.cx,S.top+S.len*0.5,8,d==='burnt'||s.burnt?'#6a5a50':'rgba(255,240,210,.9)');}});
+  if(sold2||cleared){showToast((sold2?'剩下 '+sold2+' 串半价卖给路人 +¥'+cash:'')+(sold2&&cleared?'，':'')+(cleared?'清掉 '+cleared+' 串':''),'#ffe066');
+    q7Say(sold2?'剩的串串半价卖咯，莫浪费噻！':'烤架收拾巴适咯，等大王！',2.2);}
+  return {sold:sold2,cash,cleared};}
+function startBossRound(){bossRound=true;bossPending=false;bossResult='pending';time=BOSS_TIME;lastTick=99;bossType=TYPE_KEYS[Math.floor(Math.random()*3)];window.__settle=settleGrill();
   spots.forEach(c=>{if(c&&(c.phase==='wait'||c.phase==='enter')){c.phase='leaveHappy';c.anim=0;c.mood=0;}});
-  bossSpawnT=1.1;fx.banner={t:0,dur:2.3};addTrauma(0.5);sfx('bossIn');q7Act('shock',1.0);q7Say('大胃王来咯！莫慌莫慌！',2);showToast('BOSS 加时赛 +'+BOSS_TIME+' 秒！','#ffe066');musicSync();}
+  bossSpawnT=1.1;fx.banner={t:0,dur:2.3};addTrauma(0.5);sfx('bossIn');q7Act('shock',1.0);if(!window.__settle||!(window.__settle.sold||window.__settle.cleared))q7Say('大胃王来咯！莫慌莫慌！',2);showToast('BOSS 加时赛 +'+BOSS_TIME+' 秒！','#ffe066');musicSync();}
 function spawnBoss(){spots.fill(null);spots[0]={id:++custId,isBoss:true,kind:'boss',order:[{type:bossType,need:BOSS_NEED,got:0}],patience:BOSS_TIME,maxP:BOSS_TIME,phase:'enter',anim:0,bob:0,mood:0,react:0,reactText:'',pending:0,hop:0};}
 function bossWin(c){bossResult='win';served++;c.phase='cry';c.anim=0;c.mood=1;c.react=3.2;c.reactText='太好吃了！';c.reactGood=true;bossEndT=3.2;
   const sp=L.bossSpot;sfx('bossWin');speak('太好吃了！',true);earn(30,sp.cx,sp.base-175*sp.sc,'击败Boss！+¥30','#ffe066');coinBurst(sp.cx-120*sp.sc,sp.base-60*sp.sc);coinBurst(sp.cx+120*sp.sc,sp.base-60*sp.sc);
@@ -224,10 +235,12 @@ function update(dt){q7Update(dt);
   elapsed+=dt;time-=dt;
   const sec=Math.ceil(time);if(sec<=10&&sec!==lastTick&&sec>0){lastTick=sec;sfx('tick');}
   if(!bossRound){nextCust-=dt;const waiting=spots.filter(c=>c&&c.phase==='wait').length;
-    if(nextCust<=0||(waiting===0&&nextCust>1.2&&elapsed>4)){if(nextCust<=0||Math.random()<dt*0.8){spawnCustomer();const prog=elapsed/ROUND;nextCust=rand(6,9)*DF.spawn*(1-0.15*prog);}}}
+    if(!bossPending&&(nextCust<=0||(waiting<=1&&nextCust>1.0&&elapsed>3))){if(nextCust<=0||Math.random()<dt*1.2){spawnCustomer();const prog=elapsed/ROUND;nextCust=rand(3.6,5.4)*DF.spawn*(1-0.12*prog);}}
+    // BOSS 预告：提前 BOSS_WARN 秒停止来新客人，给玩家时间卖完手上的串
+    if(!bossPending&&time<=BOSS_WARN&&time>0){const want=HOOK.forceBoss!=null?!!HOOK.forceBoss:coins>=bossThreshold();if(want)warnBoss();}}
   idleSay-=dt;if(idleSay<=0){idleSay=rand(14,22);if(Q.sayT<=0&&Q.act==='idle'&&ultT<=0)q7Say(Q_IDLE[Math.floor(Math.random()*Q_IDLE.length)],1.8);}
   if(time<=0){time=0;
-    if(!bossRound){const want=HOOK.forceBoss!=null?!!HOOK.forceBoss:coins>=bossThreshold();if(want){startBossRound();return;}endGame();return;}
+    if(!bossRound){if(bossPending){startBossRound();return;}endGame();return;}
     const b=spots.find(c=>c&&c.isBoss);if(b&&b.phase==='wait'){b.phase='leaveAngry';b.anim=0;b.react=2.2;b.reactText='没吃饱…下次吧';b.reactGood=false;sfx('bossSad');q7Act('worry',1.4);q7Say('大王慢走哈～');}
     if(bossResult!=='win')bossResult='fail';endGame();}}
 function updateFlyers(dt){for(let k=flyers.length-1;k>=0;k--){const f=flyers[k];f.t+=dt;

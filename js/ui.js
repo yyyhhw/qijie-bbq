@@ -9,7 +9,7 @@ function showOv(id){for(const k of OV_MAIN)ovEl(k).classList.toggle('show',k===i
 function ovOpen(){for(const k of['dlg','wardrobe','help','pause','over','title'])if(isOpen(k))return k;return null;}
 function closeTopOverlay(){const k=ovOpen();if(k==='dlg'){dlgAnswer(false);return true;}if(k==='wardrobe'){closeWardrobe();return true;}if(k==='help'){closeHelp();return true;}if(k==='pause'){sfx('click');setPause(false);return true;}return false;}
 function musicSyncSafe(){try{musicSync();}catch(e){}}
-function gameMusicWant(){if(state==='play')return paused?null:(bossRound?'boss':'play');return 'menu';}
+function gameMusicWant(){if(state==='play')return paused?null:(bossRound||bossPending?'boss':'play');return 'menu';}
 // 遮罩点击关闭 + [data-close]
 for(const id of['help','wardrobe','dlg','pause']){const el=ovEl(id);el.addEventListener('click',e=>{if(e.target===el){if(id==='dlg')dlgAnswer(false);else if(id==='wardrobe')closeWardrobe();else if(id==='help')closeHelp();else{sfx('click');setPause(false);}}});
   el.querySelectorAll('[data-close]').forEach(b=>b.addEventListener('click',()=>{sfx('click');if(id==='wardrobe')closeWardrobe();else if(id==='help')closeHelp();}));}
@@ -58,16 +58,16 @@ function confirmDlg(t,m,yes,cb){$('dlgT').textContent=t;$('dlgM').innerHTML=m;$(
 function dlgAnswer(v){closeOv('dlg');const cb=dlgCb;dlgCb=null;if(cb)cb(v);}
 $('dlgYes').addEventListener('click',()=>dlgAnswer(true));$('dlgNo').addEventListener('click',()=>{sfx('click');dlgAnswer(false);});
 // ---------- 衣橱 ----------
-const wd={tab:'outfit',look:{outfit:'apron',hat:'bandana'},focus:{kind:'outfit',id:'apron'}};
-const isNew=(k,id)=>k==='outfit'?Object.prototype.hasOwnProperty.call(NEW_OUTFITS,id):Object.prototype.hasOwnProperty.call(NEW_HATS,id);
-const owns=(k,id)=>id==='none'||SAVE.owned[k].includes(id);
-const itemOf=(k,id)=>id==='none'?{name:'不戴帽子',price:0}:(k==='outfit'?OUTFITS:HATS)[id];
-function openWardrobe(){Q.sayT=0;if(Q.act==='ult'||Q.act==='bigSprinkle')q7Act('idle',0.1);wd.look={outfit:SAVE.outfit,hat:SAVE.hat};wd.focus={kind:wd.tab,id:SAVE[wd.tab]};buildGrid();updateWd();openOv('wardrobe');}
+const wd={tab:'outfit',look:{outfit:'apron',hat:'bandana',hair:'classic'},focus:{kind:'outfit',id:'apron'}};
+const isNew=(k,id)=>k==='hair'?id!=='classic':k==='outfit'?Object.prototype.hasOwnProperty.call(NEW_OUTFITS,id):Object.prototype.hasOwnProperty.call(NEW_HATS,id);
+const owns=(k,id)=>(k==='hat'&&id==='none')||SAVE.owned[k].includes(id);
+const itemOf=(k,id)=>k==='hat'&&id==='none'?{name:'不戴帽子',price:0}:(k==='outfit'?OUTFITS:k==='hair'?HAIRS:HATS)[id];
+function openWardrobe(){Q.sayT=0;if(Q.act==='ult'||Q.act==='bigSprinkle')q7Act('idle',0.1);wd.look={outfit:SAVE.outfit,hat:SAVE.hat,hair:SAVE.hair};wd.focus={kind:wd.tab,id:SAVE[wd.tab]};buildGrid();updateWd();openOv('wardrobe');}
 function closeWardrobe(){closeOv('wardrobe');if(dlgCb)dlgAnswer(false);if(state==='title')renderTitle();}
 document.querySelectorAll('.tab').forEach(b=>b.addEventListener('click',()=>{sfx('click');wd.tab=b.dataset.tab;document.querySelectorAll('.tab').forEach(x=>x.classList.toggle('on',x===b));wd.focus={kind:wd.tab,id:wd.look[wd.tab]};buildGrid();updateWd();}));
-function drawCard(cv,k,id){const old=ctx;ctx=cv.getContext('2d');ctx.setTransform(2,0,0,2,0,0);ctx.clearRect(0,0,120,150);const look=k==='outfit'?{outfit:id,hat:'none'}:{outfit:wd.look.outfit,hat:id};
+function drawCard(cv,k,id){const old=ctx;ctx=cv.getContext('2d');ctx.setTransform(2,0,0,2,0,0);ctx.clearRect(0,0,120,150);const look=k==='outfit'?{outfit:id,hat:'none',hair:wd.look.hair}:k==='hair'?{outfit:wd.look.outfit,hat:'none',hair:id}:{outfit:wd.look.outfit,hat:id,hair:wd.look.hair};
   try{drawQ7(60,152,0.56,look,true);}catch(e){}ctx=old;}
-function buildGrid(){const k=wd.tab,ids=k==='outfit'?OUTFIT_IDS:['none'].concat(HAT_IDS),G=$('wdGrid');G.innerHTML='';
+function buildGrid(){const k=wd.tab,ids=k==='outfit'?OUTFIT_IDS:k==='hair'?HAIR_IDS:['none'].concat(HAT_IDS),G=$('wdGrid');G.innerHTML='';
   for(const id of ids){const it=itemOf(k,id),c=document.createElement('button');c.className='card';c.dataset.id=id;c.type='button';
     const cv=document.createElement('canvas');cv.width=240;cv.height=300;c.appendChild(cv);drawCard(cv,k,id);
     c.insertAdjacentHTML('beforeend','<div class="nm">'+it.name+'</div><div class="pr '+(owns(k,id)?'own':'')+'">'+(owns(k,id)?'已拥有':'¥'+it.price)+'</div>'+(isNew(k,id)&&!owns(k,id)?'<span class="new">新</span>':''));
@@ -77,8 +77,8 @@ function markCards(){const k=wd.tab;$('wdGrid').querySelectorAll('.card').forEac
 function updateWd(){const f=wd.focus,it=itemOf(f.kind,f.id),b=$('wdBtn');$('wdName').textContent=it.name;$('wdMoney').textContent='存款 ¥'+SAVE.savings;
   if(!owns(f.kind,f.id)){if(SAVE.savings>=it.price){b.disabled=false;b.textContent='¥'+it.price+' 买下';}else{b.disabled=true;b.textContent='还差 ¥'+(it.price-SAVE.savings);}}
   else if(SAVE[f.kind]===f.id){b.disabled=true;b.textContent='已经穿着咯';}else{b.disabled=false;b.textContent='穿上';}
-  $('wdReset').disabled=wd.look.outfit===SAVE.outfit&&wd.look.hat===SAVE.hat;markCards();}
-$('wdReset').addEventListener('click',()=>{sfx('click');wd.look={outfit:SAVE.outfit,hat:SAVE.hat};wd.focus={kind:wd.tab,id:SAVE[wd.tab]};if(wd.tab==='hat')buildGrid();updateWd();});
+  $('wdReset').disabled=wd.look.outfit===SAVE.outfit&&wd.look.hat===SAVE.hat&&wd.look.hair===SAVE.hair;markCards();}
+$('wdReset').addEventListener('click',()=>{sfx('click');wd.look={outfit:SAVE.outfit,hat:SAVE.hat,hair:SAVE.hair};wd.focus={kind:wd.tab,id:SAVE[wd.tab]};if(wd.tab!=='outfit')buildGrid();updateWd();});
 $('wdBtn').addEventListener('click',()=>{const f=wd.focus,it=itemOf(f.kind,f.id);
   if(owns(f.kind,f.id)){equip(f.kind,f.id);return;}
   if(SAVE.savings<it.price)return;sfx('click');
@@ -97,7 +97,7 @@ function step(dt){now+=dt;fxUpdate(dt);if(state==='play'&&paused){q7Update(0);re
 function draw(dt){render();if(isOpen('title'))drawMascot(dt);if(isOpen('wardrobe'))drawWdPrev();}
 function frame(t){requestAnimationFrame(frame);let dt=(t-lastT)/1000;lastT=t;if(TEST)return;if(document.hidden)return;dt=clamp(dt,0,0.05);fpsAcc+=dt;fpsN++;if(fpsAcc>=1){fps=Math.round(fpsN/fpsAcc);fpsAcc=0;fpsN=0;}step(dt);draw(dt);}
 window.advanceTime=ms=>{const n=Math.max(1,Math.round(ms/(1000/60)));for(let i=0;i<n;i++)step(1/60);draw(1/60);};
-window.render_game_to_text=()=>{const r=x=>Math.round(x*10)/10;return JSON.stringify({coord:'logical '+W+'x'+H+', origin top-left, y down',state,paused,overlay:ovOpen(),day:SAVE.day,time:r(time),coins,savings:SAVE.savings,combo,bossRound,
+window.render_game_to_text=()=>{const r=x=>Math.round(x*10)/10;return JSON.stringify({coord:'logical '+W+'x'+H+', origin top-left, y down',state,paused,overlay:ovOpen(),day:SAVE.day,time:r(time),coins,savings:SAVE.savings,combo,bossRound,bossPending,settle:window.__settle||null,
   slots:slots.map((s,i)=>s?{i,type:s.type,t:r(s.t),step:s.step,next:s.step<3?STEPS[s.step]:null,done:doneness(s),ready:sellable(s),x:r(L.slots[i].cx),y:r(L.slots[i].top+L.slots[i].len/2)}:null),
   customers:spots.map((c,i)=>c?{i,boss:!!c.isBoss,phase:c.phase,patience:r(c.patience),order:c.order.map(o=>({type:o.type,need:o.need,got:o.got})),x:r(custPos(i).cx)}:null),
   stats:{sold,served,lost,burnt:burntCount,perfect:perfectCount},q7:{act:Q.act,say:Q.sayT>0?Q.say:''},look:curLook(),fps});};

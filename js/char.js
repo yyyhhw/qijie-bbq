@@ -361,8 +361,8 @@ function sideLocks(t,sw){for(const d of[-1,1]){const s2=sw*(d>0?1:0.8);ctx.fillS
     ctx.strokeStyle=HAIR.s;ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(d*46,-158);ctx.bezierCurveTo(d*49,-136,d*49,-120,d*48+s2*0.6,-104);ctx.stroke();}}
 const BANG_S=[[44,-171,46,-146],[37,-178,32,-152],[28,-181,22,-163],[17,-182,9,-154],[3,-182,-3,-160],[-8,-182,-16,-152],[-21,-180,-28,-162],[-32,-177,-40,-148],[-44,-168,-50,-146]];
 function bangsTop(){ctx.moveTo(-50,-146);ctx.bezierCurveTo(-58,-198,-26,-218,2,-216);ctx.bezierCurveTo(32,-216,60,-198,50,-148);}
-function bangsPath(){ctx.beginPath();bangsTop();
-  let px=50,py=-148;for(const [vx,vy,tx,ty] of BANG_S){ctx.quadraticCurveTo(px-1,(py+vy)/2-3,vx,vy);ctx.quadraticCurveTo(vx+(tx-vx)*0.15+1.5,(vy+ty)/2+4,tx,ty);px=tx;py=ty;}
+function bangsPath(list){ctx.beginPath();bangsTop();
+  let px=50,py=-148;for(const [vx,vy,tx,ty] of (list||BANG_S)){ctx.quadraticCurveTo(px-1,(py+vy)/2-3,vx,vy);ctx.quadraticCurveTo(vx+(tx-vx)*0.15+1.5,(vy+ty)/2+4,tx,ty);px=tx;py=ty;}
   ctx.closePath();}
 function bangs(t){
   // 底层（更暗，填住发缕之间的缝）
@@ -436,14 +436,15 @@ function drawQ7(x,base,s,look,still){const P=q7Pose(still),t=still?0:Q.t,LK=look
   ctx.save();ctx.translate(x,base+P.bob);const ps=s*(P.pop||1);ctx.scale(ps,ps*(1+P.breath*0.006));ctx.rotate(P.sway);
   if(P.aura){ctx.save();ctx.globalAlpha=P.aura;ctx.translate(0,-120);const ag0=ctx.createRadialGradient(0,0,10,0,0,150);ag0.addColorStop(0,'rgba(255,240,150,.9)');ag0.addColorStop(1,'rgba(255,180,40,0)');ctx.fillStyle=ag0;ell(0,0,150,150);ctx.fill();
     ctx.rotate(t*2);ctx.fillStyle='rgba(255,215,80,.45)';for(let r=0;r<10;r++){ctx.rotate(Math.PI/5);ctx.beginPath();ctx.moveTo(0,0);ctx.lineTo(150,-14);ctx.lineTo(150,14);ctx.fill();}ctx.restore();}
-  ctx.save();ctx.translate(0,-104);ctx.rotate(P.tilt*0.5);ctx.translate(0,104);backHair(t,sw);ctx.restore();
+  const HS=useHair(LK.hair),cv=!!(HT&&HT.cover);ctx.save();ctx.translate(0,-104);ctx.rotate(P.tilt*0.5);ctx.translate(0,104);HS.back(t,sw,cv);ctx.restore();
   if(OF.back)OF.back(t);
   OF.body(t);
   const L1=limb(-40,-86,P.lU,P.lF,30,28,10.5,OF.sleeve||'#fff4ea',OF.sl,OF.sx,OF.cuff);drawQ7Item(P.lItem,L1,P);
   // 头部（随动作轻微歪头）
   ctx.save();ctx.translate(0,-104);ctx.rotate(P.tilt);ctx.translate(0,104);
-  drawHead(P,t,still);sideLocks(t,sw);if(!(HT&&HT.cover)){hairBow(t);ahoge(t);}bangs(t);
+  drawHead(P,t,still);HS.locks(t,sw,cv);if(!cv){if(HS.bow)hairBow(t);if(HS.ahoge)ahoge(t);}HS.bangs(t,sw,cv);
   ctx.globalAlpha=0.62;for(const d of[-1,1])drawBrow(d,d*18,-143,P.eyes);ctx.globalAlpha=1;
+  if(HS.front)HS.front(t,sw,cv);
   if(HT)HT.draw(t);
   if(P.sweat){ctx.fillStyle='#8fd3ff';ctx.beginPath();ctx.moveTo(-44,-178);ctx.quadraticCurveTo(-37,-164,-44,-160);ctx.quadraticCurveTo(-51,-164,-44,-178);ctx.fill();ctx.fillStyle='rgba(255,255,255,.75)';ell(-45,-165,1.5,2.5);ctx.fill();}
   if(P.note){ctx.globalAlpha=P.note;ctx.fillStyle='#ff7aa5';const ny=-200-(t*30%20);ctx.font='900 18px '+FONT;ctx.textAlign='center';ctx.fillText('♪',56,ny);ctx.fillText('♫',70,ny+14);ctx.globalAlpha=1;}
