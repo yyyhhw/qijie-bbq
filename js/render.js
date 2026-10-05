@@ -138,7 +138,7 @@ function drawSkewer(s,i){const S=L.slots[i],d=doneness(s),P=stagesOf(s.type),sel
   drawChunks(s.type,0,-S.len/2,S.len,col,sc,s,{flipped:s.flipped,marks,flipSq:s.flipAnim,gloss:(d==='perfect'&&s.step>=3)?0.5+0.3*Math.sin(now*4+i):0,burnt:d==='burnt'});
   ctx.restore();
   if(s.fly<1)return;
-  drawRing(s,i,d,P);
+  drawRing(s,i,d,P);if(s.pet!=null){const r=L.port?27:25;petBadge(s,S.cx+r+4,S.ringY-r+2);}
   const ly=S.labelY,lt=STAGE_TXT[d],lc=STAGE_COL[d];ctx.font='900 '+(L.port?21:19)+'px '+FONT;const tw=ctx.measureText(lt).width+20,bl=d==='warn'||d==='burnt'?Math.sin(now*9)*0.5+0.5:0;
   rr(S.cx-tw/2,ly-15,tw,30,15);ctx.fillStyle=d==='perfect'?'rgba(20,70,30,.85)':d==='warn'?'rgba(110,40,0,'+(0.75+0.2*bl)+')':d==='burnt'?'rgba(60,20,20,.85)':'rgba(30,20,20,.7)';ctx.fill();text(lt,S.cx,ly+1,L.port?21:19,lc,'900');}
 function drawRing(s,i,d,P){const S=L.slots[i],x=S.cx,y=S.ringY,r=L.port?27:25,tot=P.p2,a0=-Math.PI/2,ang=v=>a0+TAU*clamp(v/tot,0,1);
@@ -370,7 +370,7 @@ function render(){ctx=mainCtx;ensureCaches();const sx=cvs.width/W,sy=cvs.height/
   ctx.setTransform(sx,0,0,sy,0,0);ctx.translate(W/2+ox,H/2+oy);ctx.rotate(rot);ctx.translate(-W/2,-H/2);ctx.drawImage(bgCache,0,0,W,H);
   drawLiveBG();
   spots.forEach((c,i)=>{if(c)(c.isBoss?drawBossCustomer(c):drawCustomer(c,i));});
-  const q=L.q7,showQ=state!=='title';if(!L.port&&showQ)drawQ7(q.x,q.base,q.s);drawCounter();if(L.port&&showQ)drawQ7(q.x,q.base,q.s);
+  const q=L.q7,showQ=state!=='title';if(!L.port&&showQ){drawPets();drawQ7(q.x,q.base,q.s);}drawCounter();if(L.port&&showQ){drawQ7(q.x,q.base,q.s);drawPets();}
   {const py=L.prepY-2,sy2=fgCache.height/H;ctx.drawImage(fgCache,0,Math.floor(py*sy2),fgCache.width,fgCache.height-Math.floor(py*sy2),0,Math.floor(py*sy2)/sy2,W,H-Math.floor(py*sy2)/sy2);}
   // 炭火呼吸光
   const B=grillBed();ctx.save();rr(B.x,B.y,B.w,B.h,12);ctx.clip();ctx.globalCompositeOperation='lighter';const nG=6;for(let k=0;k<nG;k++){const x=B.x+B.w*(k+0.5)/nG,fl=0.55+0.25*Math.sin(now*2.3+k*1.9)+0.1*Math.sin(now*7.1+k);glow(x,B.y+B.h*0.82,B.w/nG*0.95,'rgba(255,110,30,.55)',fl);}

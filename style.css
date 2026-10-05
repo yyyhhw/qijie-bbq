@@ -104,3 +104,14 @@ kbd{display:inline-block;min-width:22px;padding:1px 6px;border-radius:6px;backgr
 @keyframes spk{from{transform:translate(0,0) scale(.4);opacity:1}to{transform:translate(var(--dx),var(--dy)) scale(1.3);opacity:0}}
 @media (max-height:500px) and (orientation:landscape){.panel{padding:12px 18px}.panel h2{font-size:22px;margin-bottom:4px}.stars span{font-size:34px}.earn{font-size:34px}.stats{grid-template-columns:repeat(6,1fr);gap:6px;margin:8px 0}.stats div{font-size:12px;padding:5px 2px}.stats b{font-size:18px}.qsay{margin:6px auto;padding:6px 12px}.steps{font-size:15px;line-height:1.5}
   #overPanel .btns{flex-direction:row;width:auto;justify-content:center;align-items:center}#overPanel .btns .row{flex-wrap:nowrap}}
+/* 宠物帮手 */
+.tab{font-size:16px;padding:0 4px;white-space:nowrap}
+.roster{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin:6px 0 2px;padding:6px 8px;background:#fff3dc;border:2px dashed #e0b88a;border-radius:12px;font-weight:900;color:#8a5a3a;font-size:14px}
+.roster[hidden]{display:none}
+.roster .rl{color:#d8261c;margin-right:2px}
+.roster .rh{font-size:13px;font-weight:800;color:#9a6a4a}
+.roster .chip{font-family:var(--font);font-weight:900;font-size:14px;min-height:36px;padding:0 10px;border-radius:18px;border:2px solid #ff9ab8;background:#fff;color:#8a3a5a;cursor:pointer;touch-action:manipulation}
+.roster .chip b{color:#d8261c;font-size:12px}
+#ov-wardrobe.pet-tab .card canvas{background:linear-gradient(#fffbe8,#ffeccc)}
+#ov-wardrobe.pet-tab .card.wear::after{content:"上班"}
+#ov-wardrobe.pet-tab #wdReset{display:none}

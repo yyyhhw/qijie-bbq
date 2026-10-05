@@ -12,18 +12,20 @@ const STEPS=['salt','flip','chili'],STEP_NAME={salt:'撒盐',flip:'翻面',chili
 const KEEPWARM=0.4;
 // ================= 存档（版本化 + 迁移 + 备份）=================
 const SAVE_KEY='qijie-bbq-save-v1',SAVE_VER=3;
-function defSave(){return {v:SAVE_VER,savings:0,best:0,rounds:0,bossWins:0,day:1,owned:{outfit:['apron'],hat:['bandana'],hair:['classic']},outfit:'apron',hat:'bandana',hair:'classic',muted:false,music:true,grant1000:false,burnt:0,served:0,helpSeen:false};}
+function defSave(){return {v:SAVE_VER,savings:0,best:0,rounds:0,bossWins:0,day:1,owned:{outfit:['apron'],hat:['bandana'],hair:['classic'],pet:[]},roster:[],outfit:'apron',hat:'bandana',hair:'classic',muted:false,music:true,grant1000:false,burnt:0,served:0,helpSeen:false};}
 let storageOK=true,saveNote='';
 const MIGRATIONS={1:d=>{d.day=Math.max(1,(Number(d.rounds)||0)+1);d.muted=false;d.music=true;d.grant1000=false;return d;},
-  2:d=>{if(!d.owned||typeof d.owned!=='object')d.owned={};d.owned.hair=['classic'];d.hair='classic';return d;}};
+  2:d=>{if(!d.owned||typeof d.owned!=='object')d.owned={};d.owned.hair=['classic'];d.hair='classic';return d;},
+  3:d=>{if(!d.owned||typeof d.owned!=='object')d.owned={};if(!Array.isArray(d.owned.pet))d.owned.pet=[];if(!Array.isArray(d.roster))d.roster=[];return d;}};
 function sanitizeSave(d){const s=defSave();if(!d||typeof d!=='object'||Array.isArray(d))return s;const num=v=>{v=Number(v);return Number.isFinite(v)&&v>=0?Math.min(1e9,Math.floor(v)):0;};
   let v=Number(d.v)||1;while(v<SAVE_VER&&MIGRATIONS[v]){d=MIGRATIONS[v](d);v++;}
   s.savings=num(d.savings);s.best=num(d.best);s.rounds=num(d.rounds);s.bossWins=num(d.bossWins);s.day=Math.max(1,num(d.day)||1);s.burnt=num(d.burnt);s.served=num(d.served);
   s.muted=!!d.muted;s.music=d.music!==false;s.grant1000=!!d.grant1000;s.helpSeen=!!d.helpSeen;
-  for(const k of['outfit','hat','hair']){const valid=k==='outfit'?OUTFITS:k==='hat'?HATS:HAIRS,list=d.owned&&Array.isArray(d.owned[k])?d.owned[k]:[];for(const id of list)if(typeof id==='string'&&Object.prototype.hasOwnProperty.call(valid,id)&&!s.owned[k].includes(id))s.owned[k].push(id);}
+  for(const k of['outfit','hat','hair','pet']){const valid=k==='outfit'?OUTFITS:k==='hat'?HATS:k==='hair'?HAIRS:PETS,list=d.owned&&Array.isArray(d.owned[k])?d.owned[k]:[];for(const id of list)if(typeof id==='string'&&Object.prototype.hasOwnProperty.call(valid,id)&&!s.owned[k].includes(id))s.owned[k].push(id);}
   if(typeof d.outfit==='string'&&s.owned.outfit.includes(d.outfit))s.outfit=d.outfit;
   if(d.hat==='none'||(typeof d.hat==='string'&&s.owned.hat.includes(d.hat)))s.hat=d.hat;
-  if(typeof d.hair==='string'&&s.owned.hair.includes(d.hair))s.hair=d.hair;s.v=SAVE_VER;return s;}
+  if(typeof d.hair==='string'&&s.owned.hair.includes(d.hair))s.hair=d.hair;
+  if(Array.isArray(d.roster))for(const id of d.roster)if(s.owned.pet.includes(id)&&!s.roster.includes(id)&&s.roster.length<PET_MAX)s.roster.push(id);s.v=SAVE_VER;return s;}
 function loadSave(){let raw=null;try{raw=window.localStorage.getItem(SAVE_KEY);}catch(e){storageOK=false;saveNote='浏览器不能保存进度，关掉页面后存款会消失';return defSave();}
   if(raw==null)return defSave();let d=null;try{d=JSON.parse(raw);}catch(e){d=null;}
   if(!d||typeof d!=='object'){let b=null;try{b=JSON.parse(localStorage.getItem(SAVE_KEY+'-bak'));}catch(e){b=null;}
@@ -48,13 +50,13 @@ function buildLayout(){readSafe();const aw=Math.max(200,innerWidth-safe.l-safe.r
       spots:[0,1,2,3].map(i=>{const x0=300,w=(W-24-x0)/4;return {cx:x0+w*(i+0.5),base:306,sc:0.8,w};}),
       trays:[0,1,2].map(i=>({x:14,y:py+i*120,w:234,h:112})),grill:{x:gx,y:py,w:gw,h:H-py-10},
       tools:['salt','flip','chili','bin'].map((id,i)=>({id,x:W-248,y:py+i*90,w:234,h:82})),
-      prepY:py-14,toastY:338,bossSpot:{cx:(300+W)/2+40,base:306,sc:0.9}};}
+      prepY:py-14,toastY:338,bossSpot:{cx:(300+W)/2+40,base:306,sc:0.9},petSpots:[{x:260,base:318,s:0.9},{x:42,base:318,s:0.8}]};}
   else{W=Math.round(clamp(1480*asp,720,860));H=Math.round(clamp(W/asp,1480,1640));const ox=(W-720)/2,ex=H-1480,gy=700+ex;
     L={port:true,ox,hud:{h:96},counterY:440,counterH:52,q7:{x:ox+150,base:742+ex*0.75,s:1.28+ex*0.0015,sayX:ox+270,sayY:540+ex*0.5,sayW:420},
       spots:[0,1,2,3].map(i=>({cx:ox+92+i*179,base:440,sc:0.8,w:176})),
       trays:[0,1,2].map(i=>({x:ox+10+i*236,y:1094+ex,w:228,h:150})),grill:{x:ox+10,y:gy,w:700,h:380},
       tools:['salt','flip','chili','bin'].map((id,i)=>({id,x:ox+10+i*177.5,y:1256+ex,w:170,h:140})),
-      prepY:684+ex,toastY:1436+ex,bossSpot:{cx:ox+380,base:440,sc:0.98}};}
+      prepY:684+ex,toastY:1436+ex,bossSpot:{cx:ox+380,base:440,sc:0.98},petSpots:[{x:ox+330,base:696+ex,s:1.05},{x:ox+422,base:696+ex,s:1.05}]};}
   const G=L.grill,iw=G.w-40,sw=iw/MAX_SLOTS;
   L.slots=[];for(let i=0;i<MAX_SLOTS;i++)L.slots.push({cx:G.x+20+sw*(i+0.5),w:sw,ringY:G.y+44,top:G.y+(L.port?104:96),len:L.port?200:180,labelY:G.y+G.h-(L.port?30:26)});
   if(!L.port){const h=L.hud.h;L.ui={avatar:{x:44,y:h/2,r:29},day:{x:84,y:h/2},time:{x:W/2-110,y:10,w:220,h:h-20},coin:{x:W-372,y:10,w:180,h:h-20},mute:{x:W-176,y:8,w:76,h:h-16},pause:{x:W-92,y:8,w:80,h:h-16}};}
@@ -81,7 +83,7 @@ function doneness(s){if(s.burnt)return 'burnt';const P=stagesOf(s.type);return s
 const sellable=s=>s&&!s.burnt&&s.step>=3&&(doneness(s)==='perfect'||doneness(s)==='warn');
 function resetGame(){DF=diff();time=ROUND;coins=0;shownCoins=0;served=0;lost=0;burntCount=0;sold=0;rejected=0;perfectCount=0;selected=-1;nextCust=1.5;elapsed=0;lastTick=99;combo=0;comboT=0;bestCombo=0;
   slots.fill(null);spots.fill(null);particles=[];floats=[];toast=null;drag=null;flyers=[];coinFlys=[];ultT=0;bossRound=false;bossPending=false;window.__settle=null;bossResult='none';bossSpawnT=0;bossEndT=0;warnSaid=0;
-  Object.assign(fx,{flash:0,ring:0,slow:0,shake:0,callout:null,banner:null,sweep:null,trauma:0});}
+  Object.assign(fx,{flash:0,ring:0,slow:0,shake:0,callout:null,banner:null,sweep:null,trauma:0});petsReset();}
 function startGame(){audioUnlock();unlockSpeech();resetGame();state='play';paused=false;showOv(null);
   showToast('第'+SAVE.day+'天开张！点生串托盘上架～','#fff');sfx('happy');q7Act('wave',1.2);q7Say(SAVE.day===1?'开张咯！大哥大姐来尝一下嘛～':'第'+SAVE.day+'天，开张咯！来耍嘛～',2.4);musicSync();}
 function showToast(text,color,warn){toast={text,color:color||'#fff',t:0,dur:1.9,warn:!!warn};}
@@ -110,11 +112,12 @@ function stepFx(s,i,st){const S=L.slots[i];s.squash=1;
   else{s.flipped=!s.flipped;s.flipAnim=1;sfx('flip');puffAt(S.cx,S.top+S.len*0.5,5,'rgba(255,230,200,.8)');}
   if(s.step===3){addFloat('调好咯',S.cx,S.ringY-36,'#7cff7a',22,0.9);}}
 function doStep(i,st){const s=slots[i];if(!s||s.burnt||s.step>=3)return false;if(st&&STEPS[s.step]!==st)return false;const cur=STEPS[s.step];s.step++;stepFx(s,i,cur);return cur;}
-function batchTool(st){let n=0,last=-1;slots.forEach((s,i)=>{if(s&&!s.burnt&&s.step<3&&STEPS[s.step]===st){doStep(i,st);n++;last=i;}});
-  if(!n){const nxt=slots.filter(s=>s&&!s.burnt&&s.step<3);showToast(nxt.length?'现在没有串要「'+STEP_NAME[st]+'」，下一步看串上的图标哦':'先放几串上烤架嘛～','#ffe0a0');sfx('soft');return 0;}
+function batchTool(st){let n=0,last=-1;slots.forEach((s,i)=>{if(s&&s.pet==null&&!s.burnt&&s.step<3&&STEPS[s.step]===st){doStep(i,st);n++;last=i;}});
+  if(!n){const nxt=slots.filter(s=>s&&s.pet==null&&!s.burnt&&s.step<3);showToast(nxt.length?'现在没有串要「'+STEP_NAME[st]+'」，下一步看串上的图标哦':'先放几串上烤架嘛～','#ffe0a0');sfx('soft');return 0;}
   q7Act(st==='flip'?'flip':st,0.55);if(st!=='flip')rollSkill(st,last);if(n>1)addFloat(STEP_NAME[st]+' ×'+n,L.grill.x+L.grill.w/2,L.grill.y+24,'#fff3c4',24,0.9);return n;}
 // 点烤串 = 做它的下一步；调好又熟了 = 直接上给要它的顾客
 function tapSkewer(i){const s=slots[i];if(!s)return;
+  if(s.pet!=null&&petW[s.pet]){const p=petW[s.pet];s.shake=0.3;sfx('soft');showToast('这串是「'+PETS[p.id].name+'」在烤的，交给它嘛～','#ffe0f0');p.hop=1;petBubble(p,PETS[p.id].kind==='human'?'我来我来！':PETS[p.id].say[0]);return;}
   if(s.burnt||doneness(s)==='burnt'){throwAway(i);return;}
   if(s.step<3){const st=doStep(i);q7Act(st==='flip'?'flip':st,0.5);if(st!=='flip')rollSkill(st,i);return;}
   if(sellable(s)){const ci=bestCustomerFor(s.type);if(ci>=0){serve(i,ci);return;}
@@ -152,7 +155,7 @@ function rollSkill(st,i){HOOK.stats.rolls++;const r=Math.random();
   const B=HOOK.forceSkillB!=null?!!HOOK.forceSkillB:r<0.06;if(B){HOOK.stats.b++;skillB();return 'B';}
   const A=HOOK.forceSkillA!=null?!!HOOK.forceSkillA:(r>=0.06&&r<0.2);if(A){HOOK.stats.a++;skillA(st,i);return 'A';}return null;}
 function skillA(st,i){const col=st==='salt'?'#ffffff':'#ff3b2a';let n=0;
-  slots.forEach((s,j)=>{if(!s||j===i||s.burnt||s.step>=3)return;const cur=STEPS[s.step];s.step++;stepFx(s,j,cur);n++;s.pop=0.75;const S=L.slots[j];sparkBurst(S.cx,S.top+S.len*0.45,14,['#fff7b0','#ffd23f',col]);});
+  slots.forEach((s,j)=>{if(!s||j===i||s.pet!=null||s.burnt||s.step>=3)return;const cur=STEPS[s.step];s.step++;stepFx(s,j,cur);n++;s.pop=0.75;const S=L.slots[j];sparkBurst(S.cx,S.top+S.len*0.45,14,['#fff7b0','#ffd23f',col]);});
   if(i>=0){const S=L.slots[i];sparkBurst(S.cx,S.top+S.len*0.45,12,['#fff7b0','#ffd23f',col]);}
   fx.sweep={t:0,dur:0.8,col};fx.callout={text:'全场撒料！',t:0,dur:1.5,kind:'A',st,n};sfx('skillA');
   q7Act('bigSprinkle',1.2,st);q7Say(st==='salt'?'撒盐咯～人人有份！':'辣椒管够哈！',1.5);return n;}
@@ -222,7 +225,7 @@ function update(dt){q7Update(dt);
     else if(d==='warn'){if(Math.random()<dt*9)smoke(S.cx,S.top+rand(20,S.len*0.7),'#8a7a70');}
     else if(s.t>2&&Math.random()<dt*1.6)smoke(S.cx,S.top+rand(20,S.len*0.7),'#e8e2dc');});
   sizzleLevel(Math.min(0.07,cooking*0.013));
-  updateFlyers(dt);
+  updateFlyers(dt);petsUpdate(dt);
   spots.forEach((c,i)=>{if(!c)return;c.bob+=dt;c.react=Math.max(0,c.react-dt);c.hop=Math.max(0,c.hop-dt*3);if(c.isBoss){bossCustUpdate(c,i,dt);return;}
     if(c.phase==='enter'){c.anim+=dt*1.5;if(c.anim>=1){c.anim=1;c.phase='wait';}}
     else if(c.phase==='wait'){if(state==='play'&&!(c.pending>0)){c.patience-=dt;
@@ -273,7 +276,7 @@ cvs.addEventListener('pointerdown',e=>{e.preventDefault();if(state!=='play'||pau
 cvs.addEventListener('pointermove',e=>{const p=toLogical(e);pointer=p;if(!down||e.pointerId!==down.id)return;
   if(!drag&&Math.hypot(p.x-down.x,p.y-down.y)>12/scale){const h=down.h;
     if(h.k==='tray')drag={kind:'tray',type:TYPE_KEYS[h.i],x:p.x,y:p.y,from:L.trays[h.i]};
-    else if(h.k==='slot'&&slots[h.i])drag={kind:'slot',i:h.i,x:p.x,y:p.y};
+    else if(h.k==='slot'&&slots[h.i]&&slots[h.i].pet==null)drag={kind:'slot',i:h.i,x:p.x,y:p.y};
     if(drag){press=null;sfx('pick');}}
   if(drag){drag.x=p.x;drag.y=p.y;}});
 function endPointer(e,cancel){if(!down||e.pointerId!==down.id)return;const p=toLogical(e);const h=hit(p);press=null;
@@ -290,7 +293,7 @@ function tapCustomer(ci){const c=spots[ci];if(!c||c.phase!=='wait')return;
   for(let i=0;i<MAX_SLOTS;i++){const s=slots[i];if(sellable(s)&&custWants(c,s.type)){serve(i,ci);return;}}
   const need=c.order.filter(o=>o.got+(o.inbound||0)<o.need).map(o=>TYPES[o.type].name+'×'+(o.need-o.got-(o.inbound||0))).join('、');
   showToast('要：'+need+'，烤好调好再点我～','#fff');sfx('soft');}
-function serveAllReady(){let n=0;for(let i=0;i<MAX_SLOTS;i++){const s=slots[i];if(sellable(s)){const ci=bestCustomerFor(s.type);if(ci>=0&&serve(i,ci))n++;}}if(!n){showToast('还没有能上的串','#fff');sfx('soft');}return n;}
+function serveAllReady(){let n=0;for(let i=0;i<MAX_SLOTS;i++){const s=slots[i];if(sellable(s)&&s.pet==null){const ci=bestCustomerFor(s.type);if(ci>=0&&serve(i,ci))n++;}}if(!n){showToast('还没有能上的串','#fff');sfx('soft');}return n;}
 function trashBurnt(){let n=0;slots.forEach((s,i)=>{if(s&&(s.burnt||doneness(s)==='burnt')){throwAway(i);n++;}});return n;}
 function tap(h){
   if(h.k==='pause'){sfx('click');setPause(true);return;}

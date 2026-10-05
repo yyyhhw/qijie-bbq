@@ -23,7 +23,8 @@ let pendingStart=false;
 function tryStart(){if(!SAVE.helpSeen){pendingStart=true;openHelp();return;}grantShown=GRANTED>0||grantShown;startGame();}
 $('bStart').addEventListener('click',()=>{sfx('click');tryStart();});
 $('bHelp').addEventListener('click',()=>{sfx('click');pendingStart=false;openHelp();});
-$('bWardrobe').addEventListener('click',()=>{sfx('click');openWardrobe();});
+$('bWardrobe').addEventListener('click',()=>{sfx('click');openWardrobe(wd.tab==='pet'?'outfit':undefined);});
+$('bPets').addEventListener('click',()=>{sfx('click');openWardrobe('pet');});
 $('bMuteT').addEventListener('click',()=>setMuted(!SAVE.muted));
 $('bMuteP').addEventListener('click',()=>setMuted(!SAVE.muted));
 $('bFS').addEventListener('click',()=>{sfx('click');toggleFS();});
@@ -58,39 +59,53 @@ function confirmDlg(t,m,yes,cb){$('dlgT').textContent=t;$('dlgM').innerHTML=m;$(
 function dlgAnswer(v){closeOv('dlg');const cb=dlgCb;dlgCb=null;if(cb)cb(v);}
 $('dlgYes').addEventListener('click',()=>dlgAnswer(true));$('dlgNo').addEventListener('click',()=>{sfx('click');dlgAnswer(false);});
 // ---------- 衣橱 ----------
-const wd={tab:'outfit',look:{outfit:'apron',hat:'bandana',hair:'classic'},focus:{kind:'outfit',id:'apron'}};
-const isNew=(k,id)=>k==='hair'?id!=='classic':k==='outfit'?Object.prototype.hasOwnProperty.call(NEW_OUTFITS,id):Object.prototype.hasOwnProperty.call(NEW_HATS,id);
+const wd={tab:'outfit',look:{outfit:'apron',hat:'bandana',hair:'classic',pet:'orange'},focus:{kind:'outfit',id:'apron'}};
+const isNew=(k,id)=>k==='pet'?true:k==='hair'?id!=='classic':k==='outfit'?Object.prototype.hasOwnProperty.call(NEW_OUTFITS,id):Object.prototype.hasOwnProperty.call(NEW_HATS,id);
 const owns=(k,id)=>(k==='hat'&&id==='none')||SAVE.owned[k].includes(id);
-const itemOf=(k,id)=>k==='hat'&&id==='none'?{name:'不戴帽子',price:0}:(k==='outfit'?OUTFITS:k==='hair'?HAIRS:HATS)[id];
-function openWardrobe(){Q.sayT=0;if(Q.act==='ult'||Q.act==='bigSprinkle')q7Act('idle',0.1);wd.look={outfit:SAVE.outfit,hat:SAVE.hat,hair:SAVE.hair};wd.focus={kind:wd.tab,id:SAVE[wd.tab]};buildGrid();updateWd();openOv('wardrobe');}
+const onDuty=id=>SAVE.roster.includes(id);
+const petShort=id=>PETS[id].name.split('·').pop();
+const itemOf=(k,id)=>k==='pet'?{name:PETS[id].name,price:PET_PRICE}:k==='hat'&&id==='none'?{name:'不戴帽子',price:0}:(k==='outfit'?OUTFITS:k==='hair'?HAIRS:HATS)[id];
+function wdFocusId(k){return k==='pet'?(wd.look.pet||SAVE.roster[0]||SAVE.owned.pet[0]||PET_IDS[0]):SAVE[k];}
+function setTab(t){wd.tab=t;document.querySelectorAll('.tab').forEach(x=>x.classList.toggle('on',x.dataset.tab===t));$('ov-wardrobe').classList.toggle('pet-tab',t==='pet');}
+function openWardrobe(tab){Q.sayT=0;if(Q.act==='ult'||Q.act==='bigSprinkle')q7Act('idle',0.1);if(typeof tab==='string')setTab(tab);else setTab(wd.tab);wd.look={outfit:SAVE.outfit,hat:SAVE.hat,hair:SAVE.hair,pet:SAVE.roster[0]||SAVE.owned.pet[0]||PET_IDS[0]};wd.focus={kind:wd.tab,id:wdFocusId(wd.tab)};buildGrid();updateWd();openOv('wardrobe');}
 function closeWardrobe(){closeOv('wardrobe');if(dlgCb)dlgAnswer(false);if(state==='title')renderTitle();}
-document.querySelectorAll('.tab').forEach(b=>b.addEventListener('click',()=>{sfx('click');wd.tab=b.dataset.tab;document.querySelectorAll('.tab').forEach(x=>x.classList.toggle('on',x===b));wd.focus={kind:wd.tab,id:wd.look[wd.tab]};buildGrid();updateWd();}));
-function drawCard(cv,k,id){const old=ctx;ctx=cv.getContext('2d');ctx.setTransform(2,0,0,2,0,0);ctx.clearRect(0,0,120,150);const look=k==='outfit'?{outfit:id,hat:'none',hair:wd.look.hair}:k==='hair'?{outfit:wd.look.outfit,hat:'none',hair:id}:{outfit:wd.look.outfit,hat:id,hair:wd.look.hair};
+document.querySelectorAll('.tab').forEach(b=>b.addEventListener('click',()=>{sfx('click');setTab(b.dataset.tab);wd.focus={kind:wd.tab,id:wd.tab==='pet'?wdFocusId('pet'):wd.look[wd.tab]};buildGrid();updateWd();}));
+function drawCard(cv,k,id){const old=ctx;ctx=cv.getContext('2d');ctx.setTransform(2,0,0,2,0,0);ctx.clearRect(0,0,120,150);if(k==='pet'){try{drawPet(id,60,136,1.05,{t:1.3});}catch(e){}ctx=old;return;}const look=k==='outfit'?{outfit:id,hat:'none',hair:wd.look.hair}:k==='hair'?{outfit:wd.look.outfit,hat:'none',hair:id}:{outfit:wd.look.outfit,hat:id,hair:wd.look.hair};
   try{drawQ7(60,152,0.56,look,true);}catch(e){}ctx=old;}
-function buildGrid(){const k=wd.tab,ids=k==='outfit'?OUTFIT_IDS:k==='hair'?HAIR_IDS:['none'].concat(HAT_IDS),G=$('wdGrid');G.innerHTML='';
+function buildGrid(){const k=wd.tab,ids=k==='pet'?PET_IDS:k==='outfit'?OUTFIT_IDS:k==='hair'?HAIR_IDS:['none'].concat(HAT_IDS),G=$('wdGrid');G.innerHTML='';
   for(const id of ids){const it=itemOf(k,id),c=document.createElement('button');c.className='card';c.dataset.id=id;c.type='button';
     const cv=document.createElement('canvas');cv.width=240;cv.height=300;c.appendChild(cv);drawCard(cv,k,id);
-    c.insertAdjacentHTML('beforeend','<div class="nm">'+it.name+'</div><div class="pr '+(owns(k,id)?'own':'')+'">'+(owns(k,id)?'已拥有':'¥'+it.price)+'</div>'+(isNew(k,id)&&!owns(k,id)?'<span class="new">新</span>':''));
+    c.insertAdjacentHTML('beforeend','<div class="nm">'+it.name+'</div><div class="pr '+(owns(k,id)?'own':'')+'">'+(k==='pet'&&onDuty(id)?'上班中':owns(k,id)?'已拥有':'¥'+it.price)+'</div>'+(isNew(k,id)&&!owns(k,id)?'<span class="new">新</span>':''));
     c.addEventListener('click',()=>{sfx('pick');wd.focus={kind:k,id};wd.look[k]=id;if(k==='outfit'&&wd.tab==='outfit'){}updateWd();q7Act('twirl',0.8);});G.appendChild(c);}
   markCards();}
-function markCards(){const k=wd.tab;$('wdGrid').querySelectorAll('.card').forEach(c=>{c.classList.toggle('sel',c.dataset.id===wd.focus.id);c.classList.toggle('wear',SAVE[k]===c.dataset.id);});}
-function updateWd(){const f=wd.focus,it=itemOf(f.kind,f.id),b=$('wdBtn');$('wdName').textContent=it.name;$('wdMoney').textContent='存款 ¥'+SAVE.savings;
+function markCards(){const k=wd.tab;$('wdGrid').querySelectorAll('.card').forEach(c=>{c.classList.toggle('sel',c.dataset.id===wd.focus.id);c.classList.toggle('wear',k==='pet'?onDuty(c.dataset.id):SAVE[k]===c.dataset.id);});}
+function renderRoster(){const R=$('wdRoster');if(wd.tab!=='pet'){R.hidden=true;return;}R.hidden=false;const n=SAVE.roster.length;
+  R.innerHTML='<span class="rl">上班中 '+n+'/'+PET_MAX+'</span>'+(n?SAVE.roster.map(id=>'<button class="chip" data-id="'+id+'" type="button">'+petShort(id)+' <b>下班</b></button>').join(''):'<span class="rh">'+(SAVE.owned.pet.length?'选一只点「上班」':'买一只帮手，它会自动帮你烤串上菜（BOSS 的单还是要你亲自做哦）')+'</span>');
+  R.querySelectorAll('.chip').forEach(b=>b.addEventListener('click',()=>{sfx('click');offDuty(b.dataset.id);}));}
+function hire(id,swap){if(swap&&SAVE.roster.length>=PET_MAX)SAVE.roster.shift();if(!SAVE.roster.includes(id))SAVE.roster.push(id);persist();petsReset();sfx('happy');sparkles(14);q7Act('wave',1.2);const n=petShort(id),k=PETS[id].kind;q7Say(k==='cat'?n+'来上班咯，莫偷吃串串哈！':k==='dog'?n+'来帮忙咯，安逸惨咯！':n+'辛苦咯，下班请你吃串串噻！',2.6);buildGrid();updateWd();}
+function offDuty(id){SAVE.roster=SAVE.roster.filter(x=>x!==id);persist();petsReset();q7Say(petShort(id)+'歇一哈儿嘛～',1.8);buildGrid();updateWd();}
+function updateWd(){const f=wd.focus,it=itemOf(f.kind,f.id),b=$('wdBtn');$('wdName').textContent=it.name;$('wdMoney').textContent='存款 ¥'+SAVE.savings;renderRoster();
+  if(f.kind==='pet'){if(!owns('pet',f.id)){if(SAVE.savings>=it.price){b.disabled=false;b.textContent='¥'+it.price+' 买下';}else{b.disabled=true;b.textContent='还差 ¥'+(it.price-SAVE.savings);}}
+    else if(onDuty(f.id)){b.disabled=false;b.textContent='下班休息';}else if(SAVE.roster.length>=PET_MAX){b.disabled=false;b.textContent='上班（换下'+petShort(SAVE.roster[0])+'）';}else{b.disabled=false;b.textContent='上班！';}
+    $('wdReset').disabled=true;markCards();return;}
   if(!owns(f.kind,f.id)){if(SAVE.savings>=it.price){b.disabled=false;b.textContent='¥'+it.price+' 买下';}else{b.disabled=true;b.textContent='还差 ¥'+(it.price-SAVE.savings);}}
   else if(SAVE[f.kind]===f.id){b.disabled=true;b.textContent='已经穿着咯';}else{b.disabled=false;b.textContent='穿上';}
   $('wdReset').disabled=wd.look.outfit===SAVE.outfit&&wd.look.hat===SAVE.hat&&wd.look.hair===SAVE.hair;markCards();}
 $('wdReset').addEventListener('click',()=>{sfx('click');wd.look={outfit:SAVE.outfit,hat:SAVE.hat,hair:SAVE.hair};wd.focus={kind:wd.tab,id:SAVE[wd.tab]};if(wd.tab!=='outfit')buildGrid();updateWd();});
 $('wdBtn').addEventListener('click',()=>{const f=wd.focus,it=itemOf(f.kind,f.id);
+  if(f.kind==='pet'&&owns('pet',f.id)){sfx('click');if(onDuty(f.id))offDuty(f.id);else hire(f.id,true);return;}
   if(owns(f.kind,f.id)){equip(f.kind,f.id);return;}
   if(SAVE.savings<it.price)return;sfx('click');
   confirmDlg('买下「'+it.name+'」？','花 <b>¥'+it.price+'</b>，存款还剩 ¥'+(SAVE.savings-it.price)+'。','买！',ok=>{if(!ok)return;
-    if(owns(f.kind,f.id)||SAVE.savings<it.price)return;SAVE.savings-=it.price;SAVE.owned[f.kind].push(f.id);persist();sfx('buy');sparkles(26);equip(f.kind,f.id,true);buildGrid();updateWd();});});
+    if(owns(f.kind,f.id)||SAVE.savings<it.price)return;SAVE.savings-=it.price;SAVE.owned[f.kind].push(f.id);persist();sfx('buy');sparkles(26);if(f.kind==='pet'){if(SAVE.roster.length<PET_MAX)hire(f.id);else{q7Say(petShort(f.id)+'来咯！点「上班」就能换它上岗～',2.4);buildGrid();updateWd();}return;}equip(f.kind,f.id,true);buildGrid();updateWd();});});
 const WEAR_SAY=['安逸！好看噻～','巴适得板！','要得，就穿这身！','嘿嘿，漂不漂亮嘛？','新衣服，美滋滋～'];
 function equip(k,id,bought){SAVE[k]=id;wd.look[k]=id;persist();if(!bought)sfx('pick');sparkles(bought?0:10);q7Act('twirl',1.2);q7Say(WEAR_SAY[Math.floor(Math.random()*WEAR_SAY.length)],2);updateWd();}
 function sparkles(n){const box=document.querySelector('.wd-left');for(let i=0;i<n;i++){const s=document.createElement('span');s.className='sparkle';s.style.left=(30+Math.random()*40)+'%';s.style.top=(30+Math.random()*40)+'%';
   s.style.setProperty('--dx',(Math.random()*240-120)+'px');s.style.setProperty('--dy',(Math.random()*240-150)+'px');s.style.animationDelay=(Math.random()*0.25)+'s';box.appendChild(s);setTimeout(()=>s.remove(),1300);}}
 const wdPrev=$('wdPrev'),wctx=wdPrev.getContext('2d');
 function drawWdPrev(){const old=ctx;ctx=wctx;ctx.setTransform(1,0,0,1,0,0);ctx.clearRect(0,0,wdPrev.width,wdPrev.height);ctx.fillStyle='rgba(255,255,255,.45)';ell(210,500,150,18);ctx.fill();
-  drawQ7(210,470,1.85,wd.look);ctx.save();ctx.translate(24,46);ctx.scale(1.6,1.6);drawQ7Say(0,0,230);ctx.restore();ctx=old;}
+  if(wd.tab==='pet'){const id=wd.focus.kind==='pet'?wd.focus.id:wd.look.pet;drawQ7(150,470,1.6,{outfit:SAVE.outfit,hat:SAVE.hat,hair:SAVE.hair});ctx.fillStyle='rgba(255,255,255,.45)';ell(330,494,70,12);ctx.fill();drawPet(id,330,490,1.45,{t:now,work:(Math.sin(now*0.9)>0.3)?1:0,hop:0});}
+  else drawQ7(210,470,1.85,wd.look);ctx.save();ctx.translate(24,46);ctx.scale(1.6,1.6);drawQ7Say(0,0,230);ctx.restore();ctx=old;}
 // ---------- 主循环 ----------
 let lastT=performance.now(),fpsAcc=0,fpsN=0,fps=60;
 function step(dt){now+=dt;fxUpdate(dt);if(state==='play'&&paused){q7Update(0);return;}const gdt=fx.slow>0?dt*0.45:dt;update(gdt);}
@@ -98,11 +113,12 @@ function draw(dt){render();if(isOpen('title'))drawMascot(dt);if(isOpen('wardrobe
 function frame(t){requestAnimationFrame(frame);let dt=(t-lastT)/1000;lastT=t;if(TEST)return;if(document.hidden)return;dt=clamp(dt,0,0.05);fpsAcc+=dt;fpsN++;if(fpsAcc>=1){fps=Math.round(fpsN/fpsAcc);fpsAcc=0;fpsN=0;}step(dt);draw(dt);}
 window.advanceTime=ms=>{const n=Math.max(1,Math.round(ms/(1000/60)));for(let i=0;i<n;i++)step(1/60);draw(1/60);};
 window.render_game_to_text=()=>{const r=x=>Math.round(x*10)/10;return JSON.stringify({coord:'logical '+W+'x'+H+', origin top-left, y down',state,paused,overlay:ovOpen(),day:SAVE.day,time:r(time),coins,savings:SAVE.savings,combo,bossRound,bossPending,settle:window.__settle||null,
-  slots:slots.map((s,i)=>s?{i,type:s.type,t:r(s.t),step:s.step,next:s.step<3?STEPS[s.step]:null,done:doneness(s),ready:sellable(s),x:r(L.slots[i].cx),y:r(L.slots[i].top+L.slots[i].len/2)}:null),
+  pets:petW.map(p=>({id:p.id,k:p.k})),roster:SAVE.roster,
+  slots:slots.map((s,i)=>s?{i,pet:s.pet!=null?s.pet:null,type:s.type,t:r(s.t),step:s.step,next:s.step<3?STEPS[s.step]:null,done:doneness(s),ready:sellable(s),x:r(L.slots[i].cx),y:r(L.slots[i].top+L.slots[i].len/2)}:null),
   customers:spots.map((c,i)=>c?{i,boss:!!c.isBoss,phase:c.phase,patience:r(c.patience),order:c.order.map(o=>({type:o.type,need:o.need,got:o.got})),x:r(custPos(i).cx)}:null),
   stats:{sold,served,lost,burnt:burntCount,perfect:perfectCount},q7:{act:Q.act,say:Q.sayT>0?Q.say:''},look:curLook(),fps});};
 window.__bbq={get W(){return W;},get H(){return H;},get state(){return state;},get slots(){return slots;},get spots(){return spots;},get L(){return L;},get SAVE(){return SAVE;},get coins(){return coins;},get time(){return time;},set time(v){time=v;},
   startGame,tap,placeSkewer,tapSkewer,serve,batchTool,serveAllReady,trashBurnt,setPause,setMuted,openWardrobe,closeWardrobe,toBackground,doneness,sellable,stagesOf,custWants,bestCustomerFor,hit,
-  HOOK,persist,setDay(n){SAVE.day=n;DF=diff();},get AU(){return AU;},SPEECH_LOG,get speechLog(){return SPEECH_LOG;},get GRANTED(){return GRANTED;}};
+  HOOK,persist,setDay(n){SAVE.day=n;DF=diff();},setPets(ids){for(const id of ids)if(!SAVE.owned.pet.includes(id))SAVE.owned.pet.push(id);SAVE.roster=ids.slice(0,PET_MAX);petsReset();},get petW(){return petW;},hire,offDuty,get AU(){return AU;},SPEECH_LOG,get speechLog(){return SPEECH_LOG;},get GRANTED(){return GRANTED;}};
 resize();renderTitle();syncMuteUI();showOv('title');requestAnimationFrame(frame);
 if(TEST)draw(0);

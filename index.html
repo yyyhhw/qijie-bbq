@@ -8,7 +8,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="theme-color" content="#1a0f24">
 <title>77的宝藏烧烤摊</title>
-<link rel="stylesheet" href="style.css?v=5">
+<link rel="stylesheet" href="style.css?v=6">
 </head>
 <body>
 <div id="safeProbe"></div>
@@ -24,7 +24,7 @@
       <div class="grant" id="grant" hidden></div>
       <div class="btns">
         <button class="btn primary big" id="bStart">开张营业</button>
-        <div class="row"><button class="btn" id="bWardrobe">77的衣橱</button><button class="btn" id="bHelp">玩法说明</button></div>
+        <div class="row"><button class="btn" id="bWardrobe">77的衣橱</button><button class="btn" id="bPets">宠物帮手</button><button class="btn" id="bHelp">玩法说明</button></div>
         <div class="row small"><button class="btn ghost" id="bMuteT">声音：开</button><button class="btn ghost" id="bFS">全屏</button></div>
       </div>
       <div class="note" id="saveNote"></div>
@@ -74,8 +74,9 @@
       <div class="info"><div class="wd-name" id="wdName"></div><div class="wd-money" id="wdMoney"></div></div>
     </div>
     <div class="wd-right">
-      <div class="tabs"><button class="tab on" data-tab="outfit">衣服</button><button class="tab" data-tab="hair">发型</button><button class="tab" data-tab="hat">帽子·发饰</button></div>
+      <div class="tabs"><button class="tab on" data-tab="outfit">衣服</button><button class="tab" data-tab="hair">发型</button><button class="tab" data-tab="hat">帽子·发饰</button><button class="tab" data-tab="pet">宠物帮手</button></div>
       <div class="grid scroll" id="wdGrid"></div>
+      <div class="roster" id="wdRoster" hidden></div>
       <div class="wd-act"><button class="btn ghost" id="wdReset">换回身上的</button><button class="btn primary" id="wdBtn">穿上</button></div>
     </div>
   </div>
@@ -86,12 +87,13 @@
   <div class="panel narrow"><h2 id="dlgT"></h2><p id="dlgM"></p><div class="row"><button class="btn ghost" id="dlgNo">再想想</button><button class="btn primary" id="dlgYes">要得！</button></div></div>
 </section>
 
-<script src="js/util.js?v=5"></script>
-<script src="js/char.js?v=5"></script>
-<script src="js/hair.js?v=5"></script>
-<script src="js/audio.js?v=5"></script>
-<script src="js/game.js?v=5"></script>
-<script src="js/render.js?v=5"></script>
-<script src="js/ui.js?v=5"></script>
+<script src="js/util.js?v=6"></script>
+<script src="js/char.js?v=6"></script>
+<script src="js/hair.js?v=6"></script>
+<script src="js/pets.js?v=6"></script>
+<script src="js/audio.js?v=6"></script>
+<script src="js/game.js?v=6"></script>
+<script src="js/render.js?v=6"></script>
+<script src="js/ui.js?v=6"></script>
 </body>
 </html>
